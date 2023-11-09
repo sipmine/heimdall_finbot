@@ -11,11 +11,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Properties;
 
 import ru.sipmine.data.PsqlConnector;
-import ru.sipmine.data.tables.Users;
 import ru.sipmine.finBot.FinBot;
 
 public class Main {
@@ -41,12 +39,8 @@ public class Main {
             session = PsqlConnector.getSessionFactory().openSession();
             transaction = session.beginTransaction(); // Start a new transaction
     
-            Users users = new Users();
-            users.setTelegramId(312);
-            users.setTelegramName("sip");
-            users.setCreatedAt(LocalDateTime.now());
-            session.persist(users);
-    
+  
+
             transaction.commit(); // Commit the transaction
     
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
