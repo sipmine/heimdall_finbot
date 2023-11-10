@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import ru.tinkoff.piapi.contract.v1.Account;
-import ru.tinkoff.piapi.contract.v1.PortfolioRequest;
+import ru.tinkoff.piapi.core.InstrumentsService;
 import ru.tinkoff.piapi.core.InvestApi;
 import ru.tinkoff.piapi.core.UsersService;
 import ru.tinkoff.piapi.core.models.Portfolio;
 import ru.tinkoff.piapi.core.OperationsService;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
 
 public class TinkoffInvestApi {
     
@@ -37,15 +37,17 @@ public class TinkoffInvestApi {
     }    
 
 
-    public void GetPortfolio() {
+    public Portfolio GetPortfolio() {
         try {
             OperationsService operationsService;
             operationsService  = api.getOperationsService();
-            System.out.println(operationsService.getPortfolio(accountid).get(5, TimeUnit.SECONDS).getPositions().get(0).getFigi().indent(0));
+            Portfolio portfolio = operationsService.getPortfolio(accountid).get(5, TimeUnit.SECONDS);
+            return portfolio;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        return null;
                 
     }   
 
