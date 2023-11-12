@@ -41,8 +41,8 @@ public class Main {
             session = PsqlConnector.getSessionFactory().openSession();
             transaction = session.beginTransaction(); // Start a new transaction
             transaction.commit(); // Commit the transaction
-            TinkoffInvestApi tinkoffInvestApi = new TinkoffInvestApi("TOKEN");
-            Portfolio portfolio = tinkoffInvestApi.GetPortfolio();
+            
+            
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(new FinBot(configData().getProperty("bot_name"), configData().getProperty("bot_token")));
         } catch (TelegramApiException e) {
