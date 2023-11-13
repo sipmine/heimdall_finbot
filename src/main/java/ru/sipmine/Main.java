@@ -13,10 +13,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import ru.sipmine.apiIntegration.TinkoffInvestApi;
 import ru.sipmine.data.PsqlConnector;
 import ru.sipmine.finBot.FinBot;
-import ru.tinkoff.piapi.core.models.Portfolio;
 
 public class Main {
     private static Properties configData() {
@@ -38,9 +36,9 @@ public class Main {
         Session session = null;
         Transaction transaction = null;
         try {
-            session = PsqlConnector.getSessionFactory().openSession();
-            transaction = session.beginTransaction(); // Start a new transaction
-            transaction.commit(); // Commit the transaction
+            // session = PsqlConnector.getSessionFactory().openSession();
+            // transaction = session.beginTransaction(); // Start a new transaction
+            // transaction.commit(); // Commit the transaction
             
             
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
