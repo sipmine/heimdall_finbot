@@ -10,39 +10,36 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class Users {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name="telegram_id")
+    @Column(name = "telegram_id")
     private long telegramId;
 
     @Column(name = "telegram_name")
-    private String telgramName;
-
+    private String telegramName;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+
 
     public void setTelegramId(long telegramId) {
         this.telegramId = telegramId;
     }
 
-    public void setTelegramName(String telgramName){
-        this.telgramName = telgramName;
+    public void setTelegramName(String telegramName) {
+        this.telegramName = telegramName;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-
 }
 
-
-    
 

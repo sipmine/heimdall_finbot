@@ -13,11 +13,8 @@ public class PsqlConnector {
     private static SessionFactory sessionFactory;
 
 
-
-
-
-    public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
+    public PsqlConnector() {
+    if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
                 configuration.configure("hibernate.cfg.xml");
@@ -28,6 +25,11 @@ public class PsqlConnector {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public static SessionFactory getSessionFactory() {
+        
         return sessionFactory;
     }
 }
