@@ -3,20 +3,18 @@ package ru.sipmine.data.DAO;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.telegram.telegrambots.meta.api.objects.User;
 
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+
 import ru.sipmine.data.tables.Users;
+
 
 public class UsersDAOImpl implements UsersDAO {
     private SessionFactory sessionFactory;
@@ -24,7 +22,6 @@ public class UsersDAOImpl implements UsersDAO {
     public UsersDAOImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
 
     @Override
     public void addUser(long telegramId, String telegramName) {
@@ -38,7 +35,7 @@ public class UsersDAOImpl implements UsersDAO {
             user.setCreatedAt(LocalDateTime.now());
             session.persist(user);
             transaction.commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
@@ -57,7 +54,7 @@ public class UsersDAOImpl implements UsersDAO {
             session.remove(getUserById(Id));
             session.flush();
             transaction.commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
@@ -79,7 +76,7 @@ public class UsersDAOImpl implements UsersDAO {
             session.flush();
             transaction.commit();
 
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
@@ -99,7 +96,7 @@ public class UsersDAOImpl implements UsersDAO {
             user = (Users) session.get(Users.class, Id);
             System.out.println(user);
             transaction.commit();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
@@ -121,16 +118,28 @@ public class UsersDAOImpl implements UsersDAO {
 
     @Override
     public List<Users> findByTelegramUserName(String username){
-            Session session = sessionFactory.openSession();
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Users> cr = cb.createQuery(Users.class);
-            Root<Users> root = cr.from(Users.class);
-            cr.select(root);
-            Query<Users> query = session.createQuery(cr);
-            
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        List<Users> users = null;
+        try {
+        
+        transaction = session.beginTransaction();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Users> cr = cb.createQuery(Users.class);
+        Root<Users> root = cr.from(Users.class);
+        cr.select(root).where(cb.equal(root.get("telegramName"), username));
+        Query<Users> query = session.createQuery(cr);
+        users = query.getResultList();
+        System.out.println(users.toString());
+        transaction.commit();
+        } catch (Exception e){
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
             session.close();
-            System.out.println(query.getResultList().size());
-            return query.getResultList();
-
         }
+        return users;
+    }
 }

@@ -1,5 +1,6 @@
 package ru.sipmine.finBot.BotCommands;
 
+
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -21,13 +22,14 @@ public final class StartCommand extends AbstractBotCommand {
 
         User user = message.getFrom();
         UserService userService = new UserService(sessionFactory);
-        List<Users> users = userService.findByTelegramUserName();
-        System.out.println("1");
-        System.out.println(users);
+        
         
         message.setText("Добро пожаловать, новый пользователь!\n");
         userService.creaateUser(user.getId(), user.getUserName());
-
+        List<Users> users = userService.findByTelegramUserName();
+        System.out.println(users.size());
+        
+        
         super.processMessage(absSender, message, null);
 
     }

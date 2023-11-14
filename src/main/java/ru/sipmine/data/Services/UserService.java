@@ -36,6 +36,6 @@ public class UserService {
     }
 
     public List<Users> findByTelegramUserName() {
-        return this.usersDAOImp.findByTelegramUserName("n");
+        return this.usersDAOImp.findByTelegramUserName("Sipgleb");
     }
 }
