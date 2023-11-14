@@ -1,10 +1,21 @@
 package ru.sipmine.data.DAO;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.telegram.telegrambots.meta.api.objects.User;
+
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import ru.sipmine.data.tables.Users;
 
 public class UsersDAOImpl implements UsersDAO {
@@ -106,4 +117,20 @@ public class UsersDAOImpl implements UsersDAO {
 
         return users != null;
     }
+
+
+    @Override
+    public List<Users> findByTelegramUserName(String username){
+            Session session = sessionFactory.openSession();
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Users> cr = cb.createQuery(Users.class);
+            Root<Users> root = cr.from(Users.class);
+            cr.select(root);
+            Query<Users> query = session.createQuery(cr);
+            
+            session.close();
+            System.out.println(query.getResultList().size());
+            return query.getResultList();
+
+        }
 }

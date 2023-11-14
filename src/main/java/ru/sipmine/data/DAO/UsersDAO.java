@@ -1,5 +1,7 @@
 package ru.sipmine.data.DAO;
 
+import java.util.List;
+
 import ru.sipmine.data.tables.Users;
 
 public interface UsersDAO {
@@ -12,4 +14,6 @@ public interface UsersDAO {
     public Users getUserById(int Id);
 
     public Boolean isCreatedUser(int Id);
+
+    public List<Users> findByTelegramUserName(String username);
 }

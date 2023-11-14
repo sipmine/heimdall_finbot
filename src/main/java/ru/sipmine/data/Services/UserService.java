@@ -1,5 +1,7 @@
 package ru.sipmine.data.Services;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import ru.sipmine.data.DAO.UsersDAOImpl;
 import ru.sipmine.data.tables.Users;
@@ -31,5 +33,9 @@ public class UserService {
 
     public boolean checkUser(int telegramId) {
         return this.usersDAOImp.isCreatedUser(telegramId);
+    }
+
+    public List<Users> findByTelegramUserName() {
+        return this.usersDAOImp.findByTelegramUserName("n");
     }
 }

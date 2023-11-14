@@ -1,10 +1,13 @@
 package ru.sipmine.finBot.BotCommands;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.sipmine.data.Services.UserService;
+import ru.sipmine.data.tables.Users;
 
 public final class StartCommand extends AbstractBotCommand {
     private SessionFactory sessionFactory;
@@ -18,13 +21,13 @@ public final class StartCommand extends AbstractBotCommand {
 
         User user = message.getFrom();
         UserService userService = new UserService(sessionFactory);
-        if (!userService.checkUser(0)) {
-            message.setText("Добро пожаловать, новый пользователь!\n");
-            userService.creaateUser(user.getId(), user.getUserName());
-        } else {
-            message.setText("Добро пожаловать, " + user.getUserName().toString() + "!\n");
-            
-        }
+        List<Users> users = userService.findByTelegramUserName();
+        System.out.println("1");
+        System.out.println(users);
+        
+        message.setText("Добро пожаловать, новый пользователь!\n");
+        userService.creaateUser(user.getId(), user.getUserName());
+
         super.processMessage(absSender, message, null);
 
     }
