@@ -122,7 +122,7 @@ public class UsersDAOImpl implements UsersDAO {
         Transaction transaction = null;
         List<Users> users = null;
         try {
-        
+    
         transaction = session.beginTransaction();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Users> cr = cb.createQuery(Users.class);
@@ -130,7 +130,7 @@ public class UsersDAOImpl implements UsersDAO {
         cr.select(root).where(cb.equal(root.get("telegramName"), username));
         Query<Users> query = session.createQuery(cr);
         users = query.getResultList();
-        System.out.println(users.toString());
+        
         transaction.commit();
         } catch (Exception e){
             if (transaction != null) {

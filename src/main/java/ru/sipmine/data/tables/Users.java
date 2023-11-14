@@ -40,6 +40,20 @@ public class Users {
         this.createdAt = createdAt;
     }
 
+    public int getId() {
+        return id;
+    }
+    public Long getTelegramId (){
+        return telegramId;
+    }
+
+    public String getTelegramName() {
+        return  telegramName;
+    }
+
+
+
+
 }
 
 

@@ -27,8 +27,8 @@ public final class StartCommand extends AbstractBotCommand {
         message.setText("Добро пожаловать, новый пользователь!\n");
         userService.creaateUser(user.getId(), user.getUserName());
         List<Users> users = userService.findByTelegramUserName();
-        System.out.println(users.size());
-        
+        System.out.println("ID: " + users.get(0).getId());
+
         
         super.processMessage(absSender, message, null);
 
