@@ -28,7 +28,7 @@ public class PsqlConnector {
     }
 
 
-    public static SessionFactory getSessionFactory() {
+    public  SessionFactory getSessionFactory() {
         
         return sessionFactory;
     }

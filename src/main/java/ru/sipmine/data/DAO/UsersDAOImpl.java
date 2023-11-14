@@ -1,5 +1,6 @@
 package ru.sipmine.data.DAO;
 
+import java.time.LocalDateTime;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,6 +24,7 @@ public class UsersDAOImpl implements UsersDAO {
             Users user = new Users();
             user.setTelegramId(telegramId);
             user.setTelegramName(telegramName);
+            user.setCreatedAt(LocalDateTime.now());
             session.persist(user);
             transaction.commit();
         } catch (HibernateException e) {
@@ -36,12 +38,12 @@ public class UsersDAOImpl implements UsersDAO {
     }
 
     @Override
-    public void deleteUser(long telegramId) {
+    public void deleteUser(int Id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            session.remove(getUserById(telegramId));
+            session.remove(getUserById(Id));
             session.flush();
             transaction.commit();
         } catch (HibernateException e) {
@@ -60,10 +62,12 @@ public class UsersDAOImpl implements UsersDAO {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Users user = getUserById(telegramId);
+            Users user = getUserById(0);
             user.setTelegramName(telegramName);
             session.merge(user);
+            session.flush();
             transaction.commit();
+
         } catch (HibernateException e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -75,13 +79,14 @@ public class UsersDAOImpl implements UsersDAO {
     }
 
     @Override
-    public Users getUserById(long telegramId) {
+    public Users getUserById(int Id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
         Users user = null;
         try {
             transaction = session.beginTransaction();
-            user = session.get(Users.class, telegramId);
+            user = (Users) session.get(Users.class, Id);
+            System.out.println(user);
             transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null) {
@@ -91,7 +96,14 @@ public class UsersDAOImpl implements UsersDAO {
         } finally {
             session.close();
         }
+        System.out.println(user);
         return user;
     }
 
+    @Override
+    public Boolean isCreatedUser(int Id) {
+        Users users = getUserById(Id);
+
+        return users != null;
+    }
 }

@@ -36,7 +36,7 @@ public class Main {
             PsqlConnector psqlConnector = new PsqlConnector();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(new FinBot(configData().getProperty("bot_name"),
-                    configData().getProperty("bot_token")));
+                    configData().getProperty("bot_token"), psqlConnector.getSessionFactory()));
         } catch (TelegramApiException e) {
             // if (transaction != null) {
             // transaction.rollback(); // Rollback the transaction in case of an error

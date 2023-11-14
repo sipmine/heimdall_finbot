@@ -2,6 +2,8 @@ package ru.sipmine.finBot;
 
 
 
+import org.glassfish.grizzly.http.server.Session;
+import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 
 
@@ -13,11 +15,12 @@ import ru.sipmine.finBot.BotCommands.StartCommand;
 public class FinBot extends TelegramLongPollingCommandBot {
     private String botName;
     private String botToken;
-    private static PsqlConnector psqlConnector;
-    public FinBot(String botName, String botToken) {
+    private SessionFactory sessionFactory;
+    public FinBot(String botName, String botToken, SessionFactory sessionFactory) {
         this.botName = botName;
         this.botToken = botToken;
-        register(new StartCommand());
+        this.sessionFactory = sessionFactory;
+        register(new StartCommand(this.sessionFactory));
 
     }
 
