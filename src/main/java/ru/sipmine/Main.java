@@ -1,8 +1,7 @@
 package ru.sipmine;
 
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -12,12 +11,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import ru.sipmine.apiIntegration.TinkoffInvestApi;
 import ru.sipmine.data.PsqlConnector;
 import ru.sipmine.finBot.FinBot;
-import ru.tinkoff.piapi.core.models.Portfolio;
 
+/**
+ * The Main class is the entry point of the application.
+ * It contains the main method which initializes and starts the FinBot Telegram bot.
+ */
 public class Main {
     private static Properties configData() {
         Properties properties = new Properties();
@@ -34,28 +34,19 @@ public class Main {
 
 
     public static void main(String[] args) throws SQLException {
-        
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = PsqlConnector.getSessionFactory().openSession();
-            transaction = session.beginTransaction(); // Start a new transaction
-            transaction.commit(); // Commit the transaction
-            
-            
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(new FinBot(configData().getProperty("bot_name"), configData().getProperty("bot_token")));
-        } catch (TelegramApiException e) {
-            if (transaction != null) {
-                transaction.rollback(); // Rollback the transaction in case of an error
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close(); // Always close the session
-            }
-    }
 
+        try {
+
+            PsqlConnector psqlConnector = new PsqlConnector();
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+            telegramBotsApi.registerBot(new FinBot(configData().getProperty("bot_name"),
+                    configData().getProperty("bot_token"), psqlConnector.getSessionFactory()));
+        } catch (TelegramApiException e) {
+            // if (transaction != null) {
+            // transaction.rollback(); // Rollback the transaction in case of an error
+            // }
+            e.printStackTrace();
+        }
 
     }
 }

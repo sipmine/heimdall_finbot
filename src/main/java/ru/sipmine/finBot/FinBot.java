@@ -1,67 +1,58 @@
+/**
+ * This class represents the main bot class that extends the TelegramLongPollingCommandBot class.
+ * It is responsible for handling incoming updates and registering bot commands.
+ */
 package ru.sipmine.finBot;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.hibernate.SessionFactory;
+import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import ru.sipmine.finBot.BotCommands.StartCommand;
 
 
-public class FinBot extends TelegramLongPollingBot{
+public class FinBot extends TelegramLongPollingCommandBot {
     private String botName;
     private String botToken;
+    private SessionFactory sessionFactory;
 
-    public FinBot(String botName, String botToken) {
+    /**
+     * Constructor for the FinBot class.
+     * @param botName The name of the bot.
+     * @param botToken The token of the bot.
+     * @param sessionFactory The session factory for the bot.
+     */
+    public FinBot(String botName, String botToken, SessionFactory sessionFactory) {
         this.botName = botName;
         this.botToken = botToken;
-
+        this.sessionFactory = sessionFactory;
+        register(new StartCommand(this.sessionFactory));
     }
-    
+
+    /**
+     * Returns the username of the bot.
+     * @return The username of the bot.
+     */
     @Override
     public String getBotUsername() {
-        // TODO
         return botName;
     }
 
+    /**
+     * Returns the token of the bot.
+     * @return The token of the bot.
+     */
     @Override
     public String getBotToken() {
-        // TODO
         return botToken;
     }
+
+    /**
+     * Processes non-command updates.
+     * @param update The update to process.
+     */
     @Override
-    public void onUpdateReceived(Update update) {
-       
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String message = update.getMessage().getText();
-            System.out.println(message);
-            if (message.equals("/mark")) {
-            System.out.println(1);
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(update.getMessage().getChatId().toString());
-            sendMessage.setText("your kb");
-            ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-            List<KeyboardRow> keyboardRows = new ArrayList<>();
+    public void processNonCommandUpdate(Update update) {
 
-            KeyboardRow row = new KeyboardRow();
-            row.add("/home");
-            row.add("/reset");
-            row.add("/clear");
-            keyboardRows.add(row);
-            keyboardMarkup.setKeyboard(keyboardRows);
-            sendMessage.setReplyMarkup(keyboardMarkup);
-            try {
-                execute(sendMessage);    
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-            
-            }
-
-        }
     }
-} 
+}

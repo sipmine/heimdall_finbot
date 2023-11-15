@@ -12,5 +12,9 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">create-drop</property>
+
+
+         <mapping class="ru.sipmine.data.tables.Users" />
     </session-factory>
 </hibernate-configuration>
