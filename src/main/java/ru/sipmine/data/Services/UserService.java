@@ -35,7 +35,7 @@ public class UserService {
         return this.usersDAOImp.isCreatedUser(telegramId);
     }
 
-    public List<Users> findByTelegramUserName() {
-        return this.usersDAOImp.findByTelegramUserName("Sipgleb");
+    public int findIdByTelegramUserName(String telegramUserName) {
+        return this.usersDAOImp.findIdByTelegramUserName(telegramUserName);
     }
 }

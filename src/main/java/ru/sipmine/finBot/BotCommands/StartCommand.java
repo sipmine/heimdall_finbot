@@ -22,12 +22,17 @@ public final class StartCommand extends AbstractBotCommand {
 
         User user = message.getFrom();
         UserService userService = new UserService(sessionFactory);
-        
-        
-        message.setText("Добро пожаловать, новый пользователь!\n");
-        userService.creaateUser(user.getId(), user.getUserName());
-        List<Users> users = userService.findByTelegramUserName();
-        System.out.println("ID: " + users.get(0).getId());
+        try {        
+            if (userService.findIdByTelegramUserName(user.getUserName().toString()) == 0){
+                userService.creaateUser(user.getId(), user.getUserName());   
+                message.setText("Добро пожаловать новый пользователь");
+            
+            } else {
+                message.setText("С возвращением");
+            }
+        } catch (IndexOutOfBoundsException e) {
+        }
+        // List<Users> users = userService.findByTelegramUserName();
 
         
         super.processMessage(absSender, message, null);

@@ -117,10 +117,10 @@ public class UsersDAOImpl implements UsersDAO {
 
 
     @Override
-    public List<Users> findByTelegramUserName(String username){
+    public int findIdByTelegramUserName(String username){
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
-        List<Users> users = null;
+        int id = 0;
         try {
     
         transaction = session.beginTransaction();
@@ -129,9 +129,10 @@ public class UsersDAOImpl implements UsersDAO {
         Root<Users> root = cr.from(Users.class);
         cr.select(root).where(cb.equal(root.get("telegramName"), username));
         Query<Users> query = session.createQuery(cr);
-        users = query.getResultList();
-        
+        List<Users> users = query.getResultList();
+        id = users.get(0).getId();
         transaction.commit();
+        
         } catch (Exception e){
             if (transaction != null) {
                 transaction.rollback();
@@ -139,7 +140,8 @@ public class UsersDAOImpl implements UsersDAO {
             e.printStackTrace();
         } finally {
             session.close();
+            
         }
-        return users;
+        return id;
     }
 }

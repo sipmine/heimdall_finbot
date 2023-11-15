@@ -15,5 +15,5 @@ public interface UsersDAO {
 
     public Boolean isCreatedUser(int Id);
 
-    public List<Users> findByTelegramUserName(String username);
+    public int findIdByTelegramUserName(String username);
 }
