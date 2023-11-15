@@ -1,10 +1,14 @@
+/**
+ * This interface represents the Data Access Object (DAO) for the Users table.
+ * It provides CRUD (Create, Read, Update, Delete) operations for the Users table.
+ */
 package ru.sipmine.data.DAO;
 
-import java.util.List;
 
 import ru.sipmine.data.tables.Users;
 
 public interface UsersDAO {
+    // CRUD operations
     public void addUser(long telegramId, String telegramName);
 
     public void deleteUser(int Id);
@@ -12,8 +16,6 @@ public interface UsersDAO {
     public void updateUser(long telegramId, String telegramName);
 
     public Users getUserById(int Id);
-
-    public Boolean isCreatedUser(int Id);
 
     public int findIdByTelegramUserName(String username);
 }

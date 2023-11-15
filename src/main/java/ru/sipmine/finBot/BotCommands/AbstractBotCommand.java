@@ -1,3 +1,8 @@
+/**
+ * This abstract class represents a bot command that can be executed by a Telegram bot.
+ * It implements the IBotCommand interface and provides basic functionality for processing a message.
+ * Subclasses must implement the constructor and can override the processMessage method to provide custom behavior.
+ */
 package ru.sipmine.finBot.BotCommands;
 
 
@@ -26,7 +31,6 @@ public abstract class AbstractBotCommand implements IBotCommand {
 
     @Override
     public String getCommandIdentifier() {
-        // TODO Auto-generated method stub
         return commandIndif;
     }
 

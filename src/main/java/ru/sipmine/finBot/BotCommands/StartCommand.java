@@ -1,41 +1,36 @@
+/**
+ * This class represents the start command of the bot.
+ * It extends the AbstractBotCommand class and implements the processMessage method.
+ * It creates a new user if the user is new, otherwise it welcomes the returning user.
+ */
 package ru.sipmine.finBot.BotCommands;
-
-
-import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import ru.sipmine.data.Services.UserService;
-import ru.sipmine.data.tables.Users;
 
-public final class StartCommand extends AbstractBotCommand {
-    private SessionFactory sessionFactory;
+public class StartCommand extends AbstractBotCommand {
+    // Userservice is used to create a new user or to find an existing user.
+    private final UserService userService;
+
     public StartCommand(SessionFactory sessionFactory) {
         super("start", "Запуск бота");
-        this.sessionFactory = sessionFactory;
+        this.userService = new UserService(sessionFactory);
     }
 
     @Override
     public void processMessage(AbsSender absSender, Message message, String[] strings) {
-
         User user = message.getFrom();
-        UserService userService = new UserService(sessionFactory);
-        try {        
-            if (userService.findIdByTelegramUserName(user.getUserName().toString()) == 0){
-                userService.creaateUser(user.getId(), user.getUserName());   
-                message.setText("Добро пожаловать новый пользователь");
-            
-            } else {
-                message.setText("С возвращением");
-            }
-        } catch (IndexOutOfBoundsException e) {
+        // If the user is not create yet, create a new user.
+        if (userService.findIdByTelegramUserName(user.getUserName()) == 0) {
+            userService.createUser(user.getId(), user.getUserName());
+            message.setText("Добро пожаловать новый пользователь");
+        } else {
+            message.setText("С возвращением");
         }
-        // List<Users> users = userService.findByTelegramUserName();
 
-        
         super.processMessage(absSender, message, null);
-
     }
 }

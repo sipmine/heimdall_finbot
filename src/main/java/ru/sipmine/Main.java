@@ -14,6 +14,10 @@ import java.util.Properties;
 import ru.sipmine.data.PsqlConnector;
 import ru.sipmine.finBot.FinBot;
 
+/**
+ * The Main class is the entry point of the application.
+ * It contains the main method which initializes and starts the FinBot Telegram bot.
+ */
 public class Main {
     private static Properties configData() {
         Properties properties = new Properties();

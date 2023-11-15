@@ -12,6 +12,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
+/**
+ * This class represents a TinkoffInvestApi object that allows interaction with the Tinkoff Invest API.
+ * It provides methods to get the user's portfolio and other investment-related information.
+ */
 public class TinkoffInvestApi {
 
 
@@ -45,7 +49,6 @@ public class TinkoffInvestApi {
                     operationsService.getPortfolio(accountid).get(5, TimeUnit.SECONDS);
             return portfolio;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
