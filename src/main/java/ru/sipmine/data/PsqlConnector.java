@@ -7,7 +7,7 @@ package ru.sipmine.data;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import ru.sipmine.data.tables.Users;
+import ru.sipmine.data.tables.UsersTable;
 
 
 
@@ -22,7 +22,7 @@ public class PsqlConnector {
                 Configuration configuration = new Configuration();
                 configuration.configure("hibernate.cfg.xml");
                 
-                configuration.addAnnotatedClass(Users.class);
+                configuration.addAnnotatedClass(UsersTable.class);
                 sessionFactory = configuration.buildSessionFactory();
             } catch (Exception e) {
                 e.printStackTrace();

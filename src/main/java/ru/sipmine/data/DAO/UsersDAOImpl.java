@@ -2,6 +2,7 @@ package ru.sipmine.data.DAO;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,8 +12,8 @@ import org.hibernate.query.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-
-import ru.sipmine.data.tables.Users;
+import ru.sipmine.data.tables.ApiIngegratioTable;
+import ru.sipmine.data.tables.UsersTable;
 
 
 /**
@@ -37,7 +38,7 @@ public class UsersDAOImpl implements UsersDAO {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Users user = new Users();
+            UsersTable user = new UsersTable();
             user.setTelegramId(telegramId);
             user.setTelegramName(telegramName);
             user.setCreatedAt(LocalDateTime.now());
@@ -89,7 +90,7 @@ public class UsersDAOImpl implements UsersDAO {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Users user = getUserById(0);
+            UsersTable user = getUserById(0);
             user.setTelegramName(telegramName);
             session.merge(user);
             session.flush();
@@ -110,13 +111,13 @@ public class UsersDAOImpl implements UsersDAO {
      * @param Id the ID of the user to return  
      */
     @Override
-    public Users getUserById(int Id) {
+    public UsersTable getUserById(int Id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
-        Users user = null;
+        UsersTable user = null;
         try {
             transaction = session.beginTransaction();
-            user = (Users) session.get(Users.class, Id);
+            user = (UsersTable) session.get(UsersTable.class, Id);
             System.out.println(user);
             transaction.commit();
         } catch (Exception e) {
@@ -147,11 +148,11 @@ public class UsersDAOImpl implements UsersDAO {
 
             transaction = session.beginTransaction();
             CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Users> cr = cb.createQuery(Users.class);
-            Root<Users> root = cr.from(Users.class);
+            CriteriaQuery<UsersTable> cr = cb.createQuery(UsersTable.class);
+            Root<UsersTable> root = cr.from(UsersTable.class);
             cr.select(root).where(cb.equal(root.get("telegramName"), username));
-            Query<Users> query = session.createQuery(cr);
-            List<Users> users = query.getResultList();
+            Query<UsersTable> query = session.createQuery(cr);
+            List<UsersTable> users = query.getResultList();
             if (users.size() > 0) {
                 id = users.get(0).getId();
             }
@@ -168,4 +169,29 @@ public class UsersDAOImpl implements UsersDAO {
         }
         return id;
     }
+    
+    @Override
+    public Set<ApiIngegratioTable> getAllApiIngegratioTables(int id) {
+        Session session = sessionFactory.openSession();
+        Set<ApiIngegratioTable> ait = null;
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            UsersTable ut =getUserById(id);  
+            ait = ut.getApiTables();
+            transaction.commit();
+        } catch (Exception e){
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+
+        }
+        return ait;
+        
+    }
+
 }

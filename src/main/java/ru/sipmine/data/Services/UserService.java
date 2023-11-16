@@ -5,9 +5,12 @@
 package ru.sipmine.data.Services;
 
 
+import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import ru.sipmine.data.DAO.UsersDAOImpl;
-import ru.sipmine.data.tables.Users;
+import ru.sipmine.data.tables.ApiIngegratioTable;
+import ru.sipmine.data.tables.UsersTable;
 
 
 public class UserService {
@@ -27,7 +30,7 @@ public class UserService {
 
     
 
-    public Users getUserById(int Id){
+    public UsersTable getUserById(int Id){
         return this.usersDAOImp.getUserById(Id);
     }
     
@@ -47,4 +50,9 @@ public class UserService {
     public int findIdByTelegramUserName(String telegramUserName) {
         return this.usersDAOImp.findIdByTelegramUserName(telegramUserName);
     }
+
+    public Set<ApiIngegratioTable> getAllApiIngegratioTables(int id){
+        return this.usersDAOImp.getAllApiIngegratioTables(id);
+    }
+
 }

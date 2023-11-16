@@ -5,7 +5,10 @@
 package ru.sipmine.data.DAO;
 
 
-import ru.sipmine.data.tables.Users;
+import java.util.Set;
+
+import ru.sipmine.data.tables.ApiIngegratioTable;
+import ru.sipmine.data.tables.UsersTable;
 
 public interface UsersDAO {
     // CRUD operations
@@ -15,7 +18,9 @@ public interface UsersDAO {
 
     public void updateUser(long telegramId, String telegramName);
 
-    public Users getUserById(int Id);
+    public UsersTable getUserById(int Id);
+
+    public Set<ApiIngegratioTable> getAllApiIngegratioTables(int id);
 
     public int findIdByTelegramUserName(String username);
 }

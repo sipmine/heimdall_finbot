@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import ru.sipmine.finBot.BotCommands.FinAnalyze;
 import ru.sipmine.finBot.BotCommands.StartCommand;
 
 
@@ -27,6 +28,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         this.botToken = botToken;
         this.sessionFactory = sessionFactory;
         register(new StartCommand(this.sessionFactory));
+        register(new FinAnalyze(this.sessionFactory));
     }
 
     /**
@@ -37,7 +39,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
     public String getBotUsername() {
         return botName;
     }
-
+    
     /**
      * Returns the token of the bot.
      * @return The token of the bot.
