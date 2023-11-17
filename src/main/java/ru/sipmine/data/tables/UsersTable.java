@@ -33,6 +33,11 @@ public class UsersTable {
     private Set<ApiIngegratioTable> apiIngegratioTables;
 
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
     public void setTelegramId(long telegramId) {
         this.telegramId = telegramId;
     }

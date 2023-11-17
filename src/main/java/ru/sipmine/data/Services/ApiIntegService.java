@@ -1,9 +1,9 @@
 package ru.sipmine.data.Services;
 
-import org.glassfish.grizzly.http.server.Session;
 import org.hibernate.SessionFactory;
 
 import ru.sipmine.data.DAO.ApiIntegDAOImpl;
+import ru.sipmine.data.tables.UsersTable;
 
 public class ApiIntegService {
     private ApiIntegDAOImpl apiIntegDAOImpl;
@@ -17,8 +17,8 @@ public class ApiIntegService {
     }
 
 
-    public void addApiInteg(String tokenApi) {
-        this.apiIntegDAOImpl.addApiInteg(tokenApi);
+    public void addApiInteg(UsersTable user_id,String tokenApi) {
+        this.apiIntegDAOImpl.addApiInteg(user_id, tokenApi);
     }
 
     public void deleteApiInteg(int Id) {

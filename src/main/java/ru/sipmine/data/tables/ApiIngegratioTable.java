@@ -22,7 +22,9 @@ public class ApiIngegratioTable {
     @Column(name = "api_token")
     private String tokenApi;
 
-
+    public void setUserId(UsersTable usersTable) {
+        this.user = usersTable;
+    }
 
     public void setTokenApi(String tokenApi) {
         this.tokenApi = tokenApi;

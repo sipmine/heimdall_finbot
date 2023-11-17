@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import ru.sipmine.data.tables.ApiIngegratioTable;
+import ru.sipmine.data.tables.UsersTable;
 
 public class ApiIntegDAOImpl implements ApiIntegDAO {
     private SessionFactory sessionFactory;
@@ -13,14 +14,17 @@ public class ApiIntegDAOImpl implements ApiIntegDAO {
     }
 
     @Override
-    public  void addApiInteg(String tokenApi) {
+    public  void addApiInteg(UsersTable usersTable, String tokenApi) {
         Session session =  sessionFactory.openSession();
         Transaction transaction = null;
+
         try {
             transaction = session.beginTransaction();
             ApiIngegratioTable apiIngegratioTable = new ApiIngegratioTable();
+            apiIngegratioTable.setUserId(usersTable);
             apiIngegratioTable.setTokenApi(tokenApi);
             session.persist(apiIngegratioTable);
+            
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
