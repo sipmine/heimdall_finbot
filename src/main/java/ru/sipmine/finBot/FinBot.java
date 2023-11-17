@@ -22,7 +22,9 @@ public class FinBot extends TelegramLongPollingCommandBot {
     private String botName;
     private String botToken;
     private SessionFactory sessionFactory;
+    private FinAnalyzeCommands finAnalyzeCommands;
     private final Map<String, String> bindingBy = new ConcurrentHashMap<>();
+
     /**
      * Constructor for the FinBot class.
      * 
@@ -35,6 +37,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         this.botToken = botToken;
         this.sessionFactory = sessionFactory;
         register(new StartCommand(this.sessionFactory));
+        finAnalyzeCommands = new FinAnalyzeCommands(sessionFactory);
     }
 
     /**
@@ -64,10 +67,23 @@ public class FinBot extends TelegramLongPollingCommandBot {
      */
     @Override
     public void processNonCommandUpdate(Update update) {
-        
-        register(new FinAnalyzeCommands(sessionFactory, update));
+
+        if (update.getMessage().getText().startsWith("/fin")) {
+            try {
+                execute(finAnalyzeCommands.handle(update));
+                bindingBy.put(update.getMessage().getChatId().toString(), "");
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        } else if (bindingBy.containsKey(update.getMessage().getChatId().toString())) {
+            try {
+                execute(finAnalyzeCommands.callback(update));
+                bindingBy.remove(update.getMessage().getChatId().toString());
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
-
 
 }
