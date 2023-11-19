@@ -4,6 +4,7 @@
  */
 package ru.sipmine.finBot;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,6 +18,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import ru.sipmine.finBot.BotCommands.FinAnalyzeCommands;
 import ru.sipmine.finBot.BotCommands.StartCommand;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FinBot extends TelegramLongPollingCommandBot {
     private String botName;
@@ -24,6 +27,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
     private SessionFactory sessionFactory;
     private FinAnalyzeCommands finAnalyzeCommands;
     private final Map<String, String> bindingBy = new ConcurrentHashMap<>();
+    private final Map<String, Object> commandList = new ConcurrentHashMap<>();
 
     /**
      * Constructor for the FinBot class.
@@ -37,7 +41,12 @@ public class FinBot extends TelegramLongPollingCommandBot {
         this.botToken = botToken;
         this.sessionFactory = sessionFactory;
         register(new StartCommand(this.sessionFactory));
-        finAnalyzeCommands = new FinAnalyzeCommands(sessionFactory);
+
+        commandList.put("botcommand", new FinAnalyzeCommands(sessionFactory));
+
+
+
+
     }
 
     /**
@@ -68,21 +77,22 @@ public class FinBot extends TelegramLongPollingCommandBot {
     @Override
     public void processNonCommandUpdate(Update update) {
 
-        if (update.getMessage().getText().startsWith("/fin")) {
-            try {
-                execute(finAnalyzeCommands.handle(update));
-                bindingBy.put(update.getMessage().getChatId().toString(), "");
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        } else if (bindingBy.containsKey(update.getMessage().getChatId().toString())) {
-            try {
-                execute(finAnalyzeCommands.callback(update));
-                bindingBy.remove(update.getMessage().getChatId().toString());
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
+        // if (update.getMessage().getText().startsWith("/fin")) {
+        // try {
+        // execute(finAnalyzeCommands.handle(update));
+        // bindingBy.put(update.getMessage().getChatId().toString(), "");
+        // } catch (TelegramApiException e) {
+        // e.printStackTrace();
+        // }
+        // } else if (bindingBy.containsKey(update.getMessage().getChatId().toString()))
+        // {
+        // try {
+        // execute(finAnalyzeCommands.callback(update));
+        // bindingBy.remove(update.getMessage().getChatId().toString());
+        // } catch (TelegramApiException e) {
+        // e.printStackTrace();
+        // }
+        // }
 
     }
 
