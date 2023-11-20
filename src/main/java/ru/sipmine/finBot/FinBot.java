@@ -17,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import ru.sipmine.finBot.BotCommands.AbstractMultiCommand;
-import ru.sipmine.finBot.BotCommands.FinAnalyzeCommands;
+import ru.sipmine.finBot.BotCommands.ApiAddCommands;
 import ru.sipmine.finBot.BotCommands.StartCommand;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,8 @@ import java.util.List;
 public class FinBot extends TelegramLongPollingCommandBot {
     private String botName;
     private String botToken;
+    private String callbackkb;
     private SessionFactory sessionFactory;
-    private FinAnalyzeCommands finAnalyzeCommands;
     private final Map<String, String> bindingBy = new ConcurrentHashMap<>();
     private final Map<String, AbstractMultiCommand> commandList = new ConcurrentHashMap<>();
 
@@ -42,8 +42,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         this.botToken = botToken;
         this.sessionFactory = sessionFactory;
         register(new StartCommand(this.sessionFactory));
-        this.finAnalyzeCommands = new FinAnalyzeCommands(sessionFactory);
-        commandList.put("/fin", new FinAnalyzeCommands(sessionFactory));
+        commandList.put("/apiadd", new ApiAddCommands(sessionFactory));
 
     }
 
@@ -83,19 +82,29 @@ public class FinBot extends TelegramLongPollingCommandBot {
      */
     @Override
     public void processNonCommandUpdate(Update update) {
-        String key = update.getMessage().getText();
-        String chatID = update.getMessage().getChatId().toString();
-        if (commandList.containsKey(key)) {
-            pubMsg(commandList.get(key).handle(update));
-            bindingBy.put(chatID, key);
+        
+        
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            String key = update.getMessage().getText();
+            String chatID = update.getMessage().getChatId().toString();    
+            if (commandList.containsKey(key)) {
+                pubMsg(commandList.get(key).handle(update));
+                bindingBy.put(chatID, key);
+            } else if (bindingBy.containsKey(update.getMessage().getChatId().toString())) {
+                pubMsg(commandList.get(bindingBy.get(chatID)).callback(update, callbackkb));
+                bindingBy.remove(chatID);
+                callbackkb = null;
 
-        } else if (bindingBy.containsKey(update.getMessage().getChatId().toString())) {
-
-            pubMsg(commandList.get(bindingBy.get(chatID)).callback(update));
-            bindingBy.remove(chatID);
-
+            }
+        } else if (update.hasCallbackQuery()) {
+            callbackkb = update.getCallbackQuery().getData().toString();
+            System.out.println(callbackkb);
+            if (callbackkb.equals("tininv")) {
+                System.out.println(1);
+                SendMessage sm = new SendMessage(update.getCallbackQuery().getMessage().getChatId().toString(), "введи токен от тинькофф инвестиций"  );
+                pubMsg(sm);
+            }   
         }
-
     }
 
 }

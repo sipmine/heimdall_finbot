@@ -24,6 +24,6 @@ public abstract class AbstractMultiCommand {
 
     public abstract SendMessage handle( Update update);
 
-    public abstract SendMessage callback( Update update);
+    public abstract SendMessage callback( Update update, String arg);
 
 }

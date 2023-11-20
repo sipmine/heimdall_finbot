@@ -17,8 +17,8 @@ public class ApiIntegService {
     }
 
 
-    public void addApiInteg(UsersTable user_id,String tokenApi) {
-        this.apiIntegDAOImpl.addApiInteg(user_id, tokenApi);
+    public void addApiInteg(UsersTable user_id,String name_service,String tokenApi) {
+        this.apiIntegDAOImpl.addApiInteg(user_id,name_service,tokenApi);
     }
 
     public void deleteApiInteg(int Id) {

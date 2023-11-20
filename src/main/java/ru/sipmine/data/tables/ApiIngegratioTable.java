@@ -19,6 +19,10 @@ public class ApiIngegratioTable {
     @JoinColumn(name="user_id", nullable = false)
     private UsersTable user;
 
+    @Column(name="name_api")
+    private String nameApi;
+
+
     @Column(name = "api_token")
     private String tokenApi;
 
@@ -28,6 +32,9 @@ public class ApiIngegratioTable {
 
     public void setTokenApi(String tokenApi) {
         this.tokenApi = tokenApi;
+    }
+    public void setNameApi(String nameApi){ 
+        this.nameApi = nameApi;
     }
 
     public int getId() {
@@ -39,5 +46,8 @@ public class ApiIngegratioTable {
         return this.tokenApi;
     }
 
+    public String getNameApi(){
+        return this.nameApi;
+    }
 
 }
