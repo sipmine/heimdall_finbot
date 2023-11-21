@@ -66,7 +66,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         return botToken;
     }
 
-    private void pubMsg(SendMessage sendMessage) {
+    public void pubMsg(SendMessage sendMessage) {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
@@ -82,7 +82,6 @@ public class FinBot extends TelegramLongPollingCommandBot {
      */
     @Override
     public void processNonCommandUpdate(Update update) {
-        
         
         if (update.hasMessage() && update.getMessage().hasText()) {
             String key = update.getMessage().getText();

@@ -8,6 +8,8 @@ package ru.sipmine.data.Services;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
+
+import lombok.NonNull;
 import ru.sipmine.data.DAO.UsersDAOImpl;
 import ru.sipmine.data.tables.ApiIngegratioTable;
 import ru.sipmine.data.tables.UsersTable;
@@ -34,8 +36,8 @@ public class UserService {
         return this.usersDAOImp.getUserById(Id);
     }
     
-    public void createUser(Long telegramId,  String telegramName){
-        this.usersDAOImp.addUser(telegramId, telegramName);
+    public void createUser(@NonNull Long long1,  String telegramName){
+        this.usersDAOImp.addUser(long1, telegramName);
     }
     
     public void deleteUser(int Id) {

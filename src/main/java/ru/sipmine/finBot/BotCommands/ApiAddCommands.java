@@ -54,9 +54,7 @@ public class ApiAddCommands extends AbstractMultiCommand {
         Message msg = update.getMessage();
         String text;
         int id = userService.findIdByTelegramUserName(msg.getFrom().getUserName());
-        System.out.println(11111);
-        System.out.println(arg);
-        System.out.println(arg == null);
+
         if (id > 0 && !(arg == null)) {
             UsersTable ut = userService.getUserById(id);
             apiIntegService.addApiInteg(ut,arg ,msg.getText().toString());
