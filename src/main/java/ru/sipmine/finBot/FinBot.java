@@ -19,6 +19,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.sipmine.finBot.BotCommands.AbstractMultiCommand;
 import ru.sipmine.finBot.BotCommands.ApiAddCommands;
 import ru.sipmine.finBot.BotCommands.StartCommand;
+import ru.sipmine.finBot.BotCommands.PortfolioCommand;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         this.botToken = botToken;
         this.sessionFactory = sessionFactory;
         register(new StartCommand(this.sessionFactory));
+        register(new PortfolioCommand(this.sessionFactory));
         commandList.put("/apiadd", new ApiAddCommands(sessionFactory));
 
     }

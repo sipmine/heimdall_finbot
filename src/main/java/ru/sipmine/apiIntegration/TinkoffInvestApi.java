@@ -55,4 +55,8 @@ public class TinkoffInvestApi {
 
     }
 
+
+    public String portfolioToString(Portfolio portfolio) {
+        return portfolio.toString();
+    }
 }
