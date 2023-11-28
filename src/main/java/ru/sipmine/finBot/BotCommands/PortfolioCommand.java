@@ -3,12 +3,9 @@ package ru.sipmine.finBot.BotCommands;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
-import org.glassfish.grizzly.http.server.Session;
+import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.bots.AbsSender;
@@ -17,9 +14,9 @@ import ru.sipmine.apiIntegration.TinkoffInvestApi;
 import ru.sipmine.data.Services.ApiIntegService;
 import ru.sipmine.data.Services.UserService;
 import ru.sipmine.data.tables.ApiIngegratioTable;
-import ru.tinkoff.piapi.core.OperationsService;
 import ru.tinkoff.piapi.core.models.Portfolio;
 import ru.tinkoff.piapi.core.models.Position;
+// ... (imports and class declaration remain unchanged)
 // ... (imports and class declaration remain unchanged)
 
 public class PortfolioCommand extends AbstractBotCommand {
@@ -27,14 +24,16 @@ public class PortfolioCommand extends AbstractBotCommand {
     // Existing variables remain unchanged
     private UserService userService;
     private ApiIntegService aIntegService;
+    // Existing variables remain unchanged
     private TinkoffInvestApi tinkoffInvestApi;
-
 
     public PortfolioCommand(SessionFactory sessionFactory) {
         super("getP", "получить портофлио");
         userService = new UserService(sessionFactory);
         aIntegService = new ApiIntegService(sessionFactory);
-         // Instantiate once
+        // Instantiate once
+        aIntegService = new ApiIntegService(sessionFactory);
+        // Instantiate once
     }
 
     @Override
@@ -50,6 +49,8 @@ public class PortfolioCommand extends AbstractBotCommand {
 
         if (token != null) {
             tinkoffInvestApi = new TinkoffInvestApi(token);
+            Map<String, String> portfolioInfo = tinkoffInvestApi.getAllPortoflio();
+
             Portfolio portfolio = tinkoffInvestApi.GetPortfolio(); // Fetch portfolio info at once
             List<Position> pos = portfolio.getPositions();
 
