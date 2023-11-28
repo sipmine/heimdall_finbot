@@ -24,12 +24,10 @@ import java.util.concurrent.TimeoutException;
  * the Tinkoff Invest API.
  * It provides methods to get the user's portfolio and other investment-related
  * information.
- */
-public class TinkoffInvestApi {
-
+ */ public class TinkoffInvestApi {
     private InvestApi api;
     private UsersService usersService;
-    private String accountid;
+    private String portfolioId;
     private Map<String, String> portfolioInfo;
     private List<Account> accounts;
 
@@ -45,10 +43,15 @@ public class TinkoffInvestApi {
 
     }
 
-    public void SetAccId(String accId) {
-        this.accountid = accId;
+    // set and get portfolioId
+    public void setPortfolioId(String portfolioId) {
+        this.portfolioId = portfolioId;
     }
 
+    public String getPortfolioId() {
+        return portfolioId;
+    } 
+    // get list portofilo for account
     public Map<String, String> getAllPortoflio() {
         int l = accounts.size();
         portfolioInfo = new HashMap<String, String>();
@@ -58,15 +61,16 @@ public class TinkoffInvestApi {
             
             portfolioInfo.put(portfolioName, portfolioId);
         }
-        portfolioInfo.remove("");
+        portfolioInfo.remove("Инвесткопилка");
         return portfolioInfo;
     }
 
+
+    // get one prtofilio for portfolioId 
     public Portfolio GetPortfolio(String portoflioId) {
         try {
             OperationsService operationsService;
             operationsService = api.getOperationsService();
-
             Portfolio portfolio = operationsService.getPortfolio(portoflioId).get(5, TimeUnit.SECONDS);
             return portfolio;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -80,7 +84,7 @@ public class TinkoffInvestApi {
             OperationsService operationsService;
             operationsService = api.getOperationsService();
 
-            Portfolio portfolio = operationsService.getPortfolio(accountid).get(5, TimeUnit.SECONDS);
+            Portfolio portfolio = operationsService.getPortfolio(portfolioId).get(5, TimeUnit.SECONDS);
             return portfolio;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
@@ -88,38 +92,34 @@ public class TinkoffInvestApi {
         return null;
     }
 
-    public InstrumentsService gInstrumentsService() {
-        return api.getInstrumentsService();
-    }
-
+    
+    // return name and ticker fin instruments
     public String[] getNameandTick(String figi, String inst) {
-        String name = null;
-        String ticker = null;
+        String name = "";
+        String ticker = "";
+        InstrumentsService gInstrumentsService = api.getInstrumentsService();
         try {
             switch (inst) {
 
                 case "share":
-                    name = gInstrumentsService().getShareByFigi(figi)
+                    name = gInstrumentsService.getShareByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getName();
-                    ticker = gInstrumentsService().getShareByFigi(figi)
+                    ticker = gInstrumentsService.getShareByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getTicker();
                     break;
                 case "etf":
-                    name = gInstrumentsService().getEtfByFigi(figi)
+                    name = gInstrumentsService.getEtfByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getName();
-                    ticker = gInstrumentsService().getEtfByFigi(figi)
+                    ticker = gInstrumentsService.getEtfByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getTicker();
                     break;
                 case "bond":
-                    name = gInstrumentsService().getBondByFigi(figi)
+                    name = gInstrumentsService.getBondByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getName();
-                    ticker = gInstrumentsService().getBondByFigi(figi)
+                    ticker = gInstrumentsService.getBondByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getTicker();
                     break;
-                default:
-                    name = " ";
-                    ticker = " ";
-                    break;
+                
             }
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
 
