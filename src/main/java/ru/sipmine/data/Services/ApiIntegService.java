@@ -3,6 +3,7 @@ package ru.sipmine.data.Services;
 import org.hibernate.SessionFactory;
 
 import ru.sipmine.data.DAO.ApiIntegDAOImpl;
+import ru.sipmine.data.tables.ApiIngegratioTable;
 import ru.sipmine.data.tables.UsersTable;
 
 public class ApiIntegService {
@@ -37,7 +38,13 @@ public class ApiIntegService {
         return this.apiIntegDAOImpl.getTokenApiById(Id);
     }
 
+    public ApiIngegratioTable gIngegratioTablebyId(int id ) {
+        return this.apiIntegDAOImpl.gIngegratioTablebyId(id);
+    }
 
+    public int findIdByName(String name) {
+        return this.apiIntegDAOImpl.findIdByName(name);
+    }
 
 
 
