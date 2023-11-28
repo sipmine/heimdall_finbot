@@ -26,7 +26,7 @@ public class PortfolioCommand extends AbstractBotCommand {
     public void processMessage(AbsSender absSender, Message message, String[] strings) {
         int id = userService.findIdByTelegramUserName(message.getFrom().getUserName());
         Set<ApiIngegratioTable> aip = userService.getAllApiIngegratioTables(id);
-
+        System.out.println(aip.iterator().next().getTokenApi());
         super.processMessage(absSender, message, strings);
     }
 

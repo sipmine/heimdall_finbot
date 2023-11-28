@@ -7,6 +7,8 @@ package ru.sipmine.data.Services;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.hibernate.SessionFactory;
 
 import lombok.NonNull;
@@ -36,7 +38,7 @@ public class UserService {
         return this.usersDAOImp.getUserById(Id);
     }
     
-    public void createUser(@NonNull Long long1,  String telegramName){
+    public void createUser(@Nonnull Long long1,  String telegramName){
         this.usersDAOImp.addUser(long1, telegramName);
     }
     
