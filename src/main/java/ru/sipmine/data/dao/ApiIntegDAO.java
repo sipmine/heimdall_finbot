@@ -1,4 +1,4 @@
-package ru.sipmine.data.DAO;
+package ru.sipmine.data.dao;
 
 import ru.sipmine.data.tables.ApiIngegratioTable;
 import ru.sipmine.data.tables.UsersTable;

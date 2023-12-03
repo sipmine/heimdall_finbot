@@ -1,8 +1,8 @@
-package ru.sipmine.data.Services;
+package ru.sipmine.data.services;
 
 import org.hibernate.SessionFactory;
 
-import ru.sipmine.data.DAO.ApiIntegDAOImpl;
+import ru.sipmine.data.dao.ApiIntegDAOImpl;
 import ru.sipmine.data.tables.ApiIngegratioTable;
 import ru.sipmine.data.tables.UsersTable;
 

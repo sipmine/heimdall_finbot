@@ -1,4 +1,4 @@
-package ru.sipmine.finBot.BotCommands;
+package ru.sipmine.finBot.botCommands;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;

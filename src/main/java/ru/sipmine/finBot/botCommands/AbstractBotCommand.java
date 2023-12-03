@@ -3,7 +3,7 @@
  * It implements the IBotCommand interface and provides basic functionality for processing a message.
  * Subclasses must implement the constructor and can override the processMessage method to provide custom behavior.
  */
-package ru.sipmine.finBot.BotCommands;
+package ru.sipmine.finBot.botCommands;
 
 
 

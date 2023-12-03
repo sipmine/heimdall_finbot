@@ -16,10 +16,11 @@ import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import ru.sipmine.finBot.BotCommands.AbstractMultiCommand;
-import ru.sipmine.finBot.BotCommands.ApiAddCommands;
-import ru.sipmine.finBot.BotCommands.StartCommand;
-import ru.sipmine.finBot.BotCommands.PortfolioCommand;
+import ru.sipmine.finBot.botCommands.AbstractMultiCommand;
+import ru.sipmine.finBot.botCommands.ApiAddCommands;
+import ru.sipmine.finBot.botCommands.PortfolioCommand;
+import ru.sipmine.finBot.botCommands.StartCommand;
+
 import java.util.ArrayList;
 import java.util.List;
 

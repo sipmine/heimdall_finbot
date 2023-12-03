@@ -2,7 +2,7 @@
  * The UserService class provides methods for managing users in the system.
  * It interacts with the UsersDAOImpl class to perform CRUD operations on the users.
  */
-package ru.sipmine.data.Services;
+package ru.sipmine.data.services;
 
 
 import java.util.Set;
@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import org.hibernate.SessionFactory;
 
 import lombok.NonNull;
-import ru.sipmine.data.DAO.UsersDAOImpl;
+import ru.sipmine.data.dao.UsersDAOImpl;
 import ru.sipmine.data.tables.ApiIngegratioTable;
 import ru.sipmine.data.tables.UsersTable;
 

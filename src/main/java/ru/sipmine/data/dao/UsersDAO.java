@@ -2,7 +2,7 @@
  * This interface represents the Data Access Object (DAO) for the Users table.
  * It provides CRUD (Create, Read, Update, Delete) operations for the Users table.
  */
-package ru.sipmine.data.DAO;
+package ru.sipmine.data.dao;
 
 
 import java.util.Set;

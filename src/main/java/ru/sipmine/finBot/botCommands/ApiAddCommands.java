@@ -1,4 +1,4 @@
-package ru.sipmine.finBot.BotCommands;
+package ru.sipmine.finBot.botCommands;
 
 import java.util.ArrayList;
 
@@ -9,8 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import ru.sipmine.data.Services.ApiIntegService;
-import ru.sipmine.data.Services.UserService;
+import ru.sipmine.data.services.ApiIntegService;
+import ru.sipmine.data.services.UserService;
 import ru.sipmine.data.tables.UsersTable;
 import java.util.List; // Add this import statement
 

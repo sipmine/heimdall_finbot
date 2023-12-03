@@ -1,4 +1,4 @@
-package ru.sipmine.data.DAO;
+package ru.sipmine.data.dao;
 
 import java.util.List;
 
