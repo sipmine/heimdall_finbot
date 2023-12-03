@@ -43,17 +43,21 @@ public class StockPortoflioUtil {
         double yield = 0.0; 
 
         Iterator<Portfolio> iterator = portfolioandPos.values().iterator();
-        Iterator<String> iterator2 = portfolioandPos.keySet().iterator();
+       
         System.out.println(portfolioandPos.size());
         for (int i = 0; i < portfolioandPos.size(); i++) {
             System.out.println(i);
-            System.out.println(iterator2.next());
             yield += iterator.next().getExpectedYield().doubleValue();
            
         }
         return yield;
     }
 
+    public double getYield(String portfolioName) {
+        Portfolio portfolio = portfolioandPos.get(portfolioName);
+        
+        return 0.0;
+    }
 
 
 }

@@ -30,10 +30,11 @@ import java.util.concurrent.TimeoutException;
     private String portfolioId;
     private Map<String, String> portfolioInfo;
     private List<Account> accounts;
-
+    private InstrumentsService instrumentsService;
     public TinkoffInvestApi(String token_tin) {
         this.api = InvestApi.create(token_tin);
         usersService = api.getUserService();
+        instrumentsService = api.getInstrumentsService();
         try {
             accounts = usersService.getAccounts().get(5, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -51,6 +52,10 @@ import java.util.concurrent.TimeoutException;
     public String getPortfolioId() {
         return portfolioId;
     } 
+    public InstrumentsService gInstrumentsService(){
+        return instrumentsService;
+    };
+
     // get list portofilo for account
     public Map<String, String> getAllPortoflio() {
         int l = accounts.size();
@@ -97,26 +102,26 @@ import java.util.concurrent.TimeoutException;
     public String[] getNameandTick(String figi, String inst) {
         String name = "";
         String ticker = "";
-        InstrumentsService gInstrumentsService = api.getInstrumentsService();
+        
         try {
             switch (inst) {
 
                 case "share":
-                    name = gInstrumentsService.getShareByFigi(figi)
+                    name = gInstrumentsService().getShareByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getName();
-                    ticker = gInstrumentsService.getShareByFigi(figi)
+                    ticker = gInstrumentsService().getShareByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getTicker();
                     break;
                 case "etf":
-                    name = gInstrumentsService.getEtfByFigi(figi)
+                    name = gInstrumentsService().getEtfByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getName();
-                    ticker = gInstrumentsService.getEtfByFigi(figi)
+                    ticker = gInstrumentsService().getEtfByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getTicker();
                     break;
                 case "bond":
-                    name = gInstrumentsService.getBondByFigi(figi)
+                    name = gInstrumentsService().getBondByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getName();
-                    ticker = gInstrumentsService.getBondByFigi(figi)
+                    ticker = gInstrumentsService().getBondByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getTicker();
                     break;
                 
