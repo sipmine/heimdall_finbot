@@ -24,19 +24,13 @@ public class StockPortoflioUtil {
         Map<String, String> nameAndTick = tinkoffInvestApi.getAllPortoflio();
         // get all portfolio position 
         int lenght = nameAndTick.size();
-        System.out.println(lenght);
         Iterator<String> portfolioId = nameAndTick.values().iterator();
         Iterator<String> portfolioName = nameAndTick.keySet().iterator();
-       
         for (int i = 0; i < lenght; i++) {
-            tinkoffInvestApi.setPortfolioId(portfolioId.next().toString());
- 
-            Portfolio portfolio = tinkoffInvestApi.GetPortfolio();
-   
+            Portfolio portfolio = tinkoffInvestApi.GetPortfolio(portfolioId.next().toString());
             portfolioandPos.put(portfolioName.next().toString(), portfolio);
-  
         }
-        
+  
     }
     // all portfolio yield
     public double getAllYield() {
@@ -54,10 +48,9 @@ public class StockPortoflioUtil {
     }
 
     public double getYieldMonth(String portfolioName) {
-        Portfolio portfolio = portfolioandPos.get(portfolioName);
-        double total_y = portfolio.getTotalAmountPortfolio().getValue().doubleValue();
-        
+        tinkoffInvestApi.getYieldForPortfolio();
         return 0.0;
+
     }
 
 

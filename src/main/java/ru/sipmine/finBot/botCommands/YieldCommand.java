@@ -15,17 +15,16 @@ import ru.sipmine.apiIntegration.TinkoffInvestApi;
 import ru.sipmine.data.services.ApiIntegService;
 import ru.sipmine.data.services.UserService;
 import ru.sipmine.data.tables.ApiIngegratioTable;
+import ru.sipmine.finUtils.StockPortoflioUtil;
 
-public class YieldCommand extends AbstractMultiCommand  {
-    
+public class YieldCommand extends AbstractMultiCommand {
+
     // Existing variables remain unchanged
     private UserService userService;
     private ApiIntegService aIntegService;
     // Existing variables remain unchanged
     private String token;
-    
-    
-    
+
     public YieldCommand(SessionFactory sessionFactory) {
         super("GetYield", "Returns the yield for a specified period");
         this.userService = new UserService(sessionFactory);
@@ -36,7 +35,7 @@ public class YieldCommand extends AbstractMultiCommand  {
     public SendMessage handle(Update update) {
         // TODO Auto-generated method stub
         Message msg = update.getMessage();
-        
+
         int id = userService.findIdByTelegramUserName(msg.getFrom().getUserName());
         Set<ApiIngegratioTable> aip = userService.getAllApiIngegratioTables(id);
         int idApi = aIntegService.findIdByName("tininv");
@@ -46,31 +45,44 @@ public class YieldCommand extends AbstractMultiCommand  {
                 .map(ApiIngegratioTable::getTokenApi)
                 .orElse(null);
         this.token = token;
+        // test
+        System.out.println(1111);
+        StockPortoflioUtil stockPortoflioUtil = new StockPortoflioUtil(token);
+        stockPortoflioUtil.getYieldMonth("Брокерский счет");
+        System.out.println(2222);
+
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+
+        InlineKeyboardButton yieldMonth = new InlineKeyboardButton();
+        InlineKeyboardButton yieldYear = new InlineKeyboardButton();
+        InlineKeyboardButton yieldAll = new InlineKeyboardButton();
+        yieldMonth.setText("за месяц");
+        yieldMonth.setCallbackData("yieldMonth");
+        yieldYear.setText("за год");
+        yieldYear.setCallbackData("yieldYear");
+        yieldAll.setText("за всё время");
+        yieldAll.setCallbackData("yieldAll");
+        rowInline.add(yieldMonth);
+        rowInline.add(yieldYear);
+        rowInline.add(yieldAll);
+        rowsInline.add(rowInline);
+        markupInline.setKeyboard(rowsInline);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(msg.getChatId());
         sendMessage.setText("Выберете за какой период, хотите получить доходность");
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        List<InlineKeyboardButton> Buttons = new ArrayList<InlineKeyboardButton>();
 
-        InlineKeyboardButton yieldMonth = new InlineKeyboardButton("Доходность за месяц");
-        InlineKeyboardButton yieldYear = new InlineKeyboardButton("Доходность за год");
-        InlineKeyboardButton yieldAll = new InlineKeyboardButton("Доходность за всё время");
-
-        Buttons.add(yieldMonth);
-        Buttons.add(yieldYear);
-        Buttons.add(yieldAll);
-        keyboard.add(Buttons);
-        inlineKeyboardMarkup.setKeyboard(keyboard);
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-        return  sendMessage;
+        sendMessage.setReplyMarkup(markupInline);
+        return sendMessage;
     }
 
     @Override
     public SendMessage callback(Update update, String arg) {
-        
-        return new SendMessage();
+        SendMessage sm = new SendMessage();
+        sm.setChatId(update.getMessage().getChatId());
+        sm.setText("done");
+        return sm;
     }
 
-    
 }

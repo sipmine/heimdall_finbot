@@ -1,5 +1,9 @@
 package ru.sipmine.apiIntegration;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +19,8 @@ import ru.tinkoff.piapi.core.OperationsService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.google.protobuf.Timestamp;
+
 /**
  * This class represents a TinkoffInvestApi object that allows interaction with
  * the Tinkoff Invest API.
@@ -24,13 +30,15 @@ import java.util.concurrent.TimeoutException;
  * the Tinkoff Invest API.
  * It provides methods to get the user's portfolio and other investment-related
  * information.
- */ public class TinkoffInvestApi {
+ */
+public class TinkoffInvestApi {
     private InvestApi api;
     private UsersService usersService;
     private String portfolioId;
     private Map<String, String> portfolioInfo;
     private List<Account> accounts;
     private InstrumentsService instrumentsService;
+
     public TinkoffInvestApi(String token_tin) {
         this.api = InvestApi.create(token_tin);
         usersService = api.getUserService();
@@ -51,8 +59,9 @@ import java.util.concurrent.TimeoutException;
 
     public String getPortfolioId() {
         return portfolioId;
-    } 
-    public InstrumentsService gInstrumentsService(){
+    }
+
+    public InstrumentsService gInstrumentsService() {
         return instrumentsService;
     };
 
@@ -63,20 +72,20 @@ import java.util.concurrent.TimeoutException;
         for (int i = 0; i < l; i++) {
             String portfolioName = accounts.get(i).getName();
             String portfolioId = accounts.get(i).getId();
-            
+
             portfolioInfo.put(portfolioName, portfolioId);
         }
         portfolioInfo.remove("Инвесткопилка");
         return portfolioInfo;
     }
 
-
-    // get one prtofilio for portfolioId 
+    // get one prtofilio for portfolioId
     public Portfolio GetPortfolio(String portoflioId) {
         try {
             OperationsService operationsService;
             operationsService = api.getOperationsService();
             Portfolio portfolio = operationsService.getPortfolio(portoflioId).get(5, TimeUnit.SECONDS);
+            setPortfolioId(portoflioId);
             return portfolio;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
@@ -87,8 +96,7 @@ import java.util.concurrent.TimeoutException;
     public Portfolio GetPortfolio() {
         try {
             OperationsService operationsService;
-            operationsService = api.getOperationsService();   
-            operationsService.getAllOperationsSync(portfolioId, null, null);
+            operationsService = api.getOperationsService();
             Portfolio portfolio = operationsService.getPortfolio(portfolioId).get(5, TimeUnit.SECONDS);
             return portfolio;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -97,12 +105,11 @@ import java.util.concurrent.TimeoutException;
         return null;
     }
 
-    
     // return name and ticker fin instruments
     public String[] getNameandTick(String figi, String inst) {
         String name = "";
         String ticker = "";
-        
+
         try {
             switch (inst) {
 
@@ -124,7 +131,7 @@ import java.util.concurrent.TimeoutException;
                     ticker = gInstrumentsService().getBondByFigi(figi)
                             .get(5, TimeUnit.SECONDS).getTicker();
                     break;
-                
+
             }
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
 
@@ -134,9 +141,10 @@ import java.util.concurrent.TimeoutException;
         return new String[] { ticker, name };
     }
 
+    public double getYieldForPortfolio() {
+        
 
-    public OperationsService gOperationsService() {
-        return api.getOperationsService();
+        return 0.0;
     }
 
 }

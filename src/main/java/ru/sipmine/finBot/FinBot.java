@@ -20,6 +20,7 @@ import ru.sipmine.finBot.botCommands.AbstractMultiCommand;
 import ru.sipmine.finBot.botCommands.ApiAddCommands;
 import ru.sipmine.finBot.botCommands.PortfolioCommand;
 import ru.sipmine.finBot.botCommands.StartCommand;
+import ru.sipmine.finBot.botCommands.YieldCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         register(new StartCommand(this.sessionFactory));
         register(new PortfolioCommand(this.sessionFactory));
         commandList.put("/apiadd", new ApiAddCommands(sessionFactory));
-
+        commandList.put("/getYield", new YieldCommand(sessionFactory));
     }
 
     /**

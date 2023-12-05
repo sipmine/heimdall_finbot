@@ -58,6 +58,7 @@ public class PortfolioCommand extends AbstractBotCommand {
             for (Position position : pos) {
                 String inst = position.getInstrumentType().toString();
                 String figi = position.getFigi();
+                System.out.println(figi);
                 String[] info = tinkoffInvestApi.getNameandTick(figi, inst);
                 BigDecimal curPrice = position.getCurrentPrice().getValue();
                 BigDecimal buyPrice = position.getAveragePositionPrice().getValue();
