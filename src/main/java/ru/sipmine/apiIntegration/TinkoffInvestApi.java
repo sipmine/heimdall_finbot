@@ -88,7 +88,7 @@ import java.util.concurrent.TimeoutException;
         try {
             OperationsService operationsService;
             operationsService = api.getOperationsService();   
-            operationsService.getAllOperationsSync(portfolioId, null, null)
+            operationsService.getAllOperationsSync(portfolioId, null, null);
             Portfolio portfolio = operationsService.getPortfolio(portfolioId).get(5, TimeUnit.SECONDS);
             return portfolio;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
