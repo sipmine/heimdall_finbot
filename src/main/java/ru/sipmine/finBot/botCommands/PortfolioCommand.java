@@ -33,8 +33,6 @@ public class PortfolioCommand extends AbstractBotCommand {
         userService = new UserService(sessionFactory);
         aIntegService = new ApiIntegService(sessionFactory);
         // Instantiate once
-        aIntegService = new ApiIntegService(sessionFactory);
-        // Instantiate once
     }
 
     @Override
@@ -49,32 +47,30 @@ public class PortfolioCommand extends AbstractBotCommand {
                 .orElse(null);
 
         if (token != null) {
-            // tinkoffInvestApi = new TinkoffInvestApi(token);
-            // Map<String, String> portfolioInfo = tinkoffInvestApi.getAllPortoflio();
+            tinkoffInvestApi = new TinkoffInvestApi(token);
+            Map<String, String> portfolioInfo = tinkoffInvestApi.getAllPortoflio();
 
-            // Portfolio portfolio = tinkoffInvestApi.GetPortfolio(portfolioInfo.entrySet().iterator().next().getValue()); // Fetch portfolio info at once
-            // List<Position> pos = portfolio.getPositions();
+            Portfolio portfolio = tinkoffInvestApi.GetPortfolio(portfolioInfo.entrySet().iterator().next().getValue()); // Fetch portfolio info at once
+            List<Position> pos = portfolio.getPositions();
 
             StringBuilder messageText = new StringBuilder(); // StringBuilder for message content
-            StockPortoflioUtil stockPortoflioUtil = new StockPortoflioUtil(token);
-            stockPortoflioUtil.getAllYield();
-            messageText.append(0);
-            // for (Position position : pos) {
-            //     String inst = position.getInstrumentType().toString();
-            //     String figi = position.getFigi();
-            //     String[] info = tinkoffInvestApi.getNameandTick(figi, inst);
-            //     BigDecimal curPrice = position.getCurrentPrice().getValue();
-            //     BigDecimal buyPrice = position.getAveragePositionPrice().getValue();
-            //     BigDecimal quantity = position.getQuantity();
 
-            //     // Append position information to the message text
-            //     messageText.append("Название: ").append(info[1])
-            //             .append(" Тикер: ").append(info[0])
-            //             .append(" Текущая цена: ").append(curPrice.doubleValue())
-            //             .append(" Цена покупки: ").append(buyPrice.doubleValue())
-            //             .append(" Количество: ").append(quantity.doubleValue()).append("\n")
-            //             .append("-------------------------\n");
-            // }
+            for (Position position : pos) {
+                String inst = position.getInstrumentType().toString();
+                String figi = position.getFigi();
+                String[] info = tinkoffInvestApi.getNameandTick(figi, inst);
+                BigDecimal curPrice = position.getCurrentPrice().getValue();
+                BigDecimal buyPrice = position.getAveragePositionPrice().getValue();
+                BigDecimal quantity = position.getQuantity();
+
+                // Append position information to the message text
+                messageText.append("Название: ").append(info[1])
+                        .append(" Тикер: ").append(info[0])
+                        .append(" Текущая цена: ").append(curPrice.doubleValue())
+                        .append(" Цена покупки: ").append(buyPrice.doubleValue())
+                        .append(" Количество: ").append(quantity.doubleValue()).append("\n")
+                        .append("-------------------------\n");
+            }
 
             // Set the message text and send the message
             message.setText(messageText.toString());

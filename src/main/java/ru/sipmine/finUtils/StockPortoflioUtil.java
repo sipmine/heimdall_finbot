@@ -53,8 +53,9 @@ public class StockPortoflioUtil {
         return yield;
     }
 
-    public double getYield(String portfolioName) {
+    public double getYieldMonth(String portfolioName) {
         Portfolio portfolio = portfolioandPos.get(portfolioName);
+        double total_y = portfolio.getTotalAmountPortfolio().getValue().doubleValue();
         
         return 0.0;
     }
