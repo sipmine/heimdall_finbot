@@ -48,7 +48,7 @@ public class YieldCommand extends AbstractMultiCommand {
         // test
         System.out.println(1111);
         StockPortoflioUtil stockPortoflioUtil = new StockPortoflioUtil(token);
-        stockPortoflioUtil.getYieldMonth("Брокерский счет");
+        System.out.println(stockPortoflioUtil.getYieldMonth());
         System.out.println(2222);
 
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();

@@ -15,6 +15,7 @@ import ru.tinkoff.piapi.core.InstrumentsService;
 import ru.tinkoff.piapi.core.InvestApi;
 import ru.tinkoff.piapi.core.UsersService;
 import ru.tinkoff.piapi.core.models.Portfolio;
+import ru.tinkoff.piapi.core.models.Position;
 import ru.tinkoff.piapi.core.OperationsService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -98,6 +99,7 @@ public class TinkoffInvestApi {
             OperationsService operationsService;
             operationsService = api.getOperationsService();
             Portfolio portfolio = operationsService.getPortfolio(portfolioId).get(5, TimeUnit.SECONDS);
+            
             return portfolio;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             e.printStackTrace();
@@ -141,10 +143,33 @@ public class TinkoffInvestApi {
         return new String[] { ticker, name };
     }
 
-    public double getYieldForPortfolio() {
-        
-
-        return 0.0;
+    public double getYieldForPortfolio(Portfolio portfolio) {
+        List<Position> positionsList = portfolio.getPositions();
+        double totalInvestment = 0.0;
+        double totalCurrentValue = 0.0;
+    
+        // Рассчитываем общую стоимость вложений и текущую общую стоимость
+        for (Position position : positionsList) {
+            double averagePositionPrice = position.getAveragePositionPrice().getValue().doubleValue();
+            double currentPrice = position.getCurrentPrice().getValue().doubleValue();
+            int quantity = position.getQuantity().intValue(); // предположим, есть метод для получения количества позиции
+            System.out.println(averagePositionPrice);
+            System.out.println(currentPrice);
+            System.out.println(quantity);
+            double positionInvestment = averagePositionPrice * quantity;
+            double positionCurrentValue = currentPrice * quantity;
+    
+            totalInvestment += positionInvestment;
+            totalCurrentValue += positionCurrentValue;
+        }
+    
+        // Рассчитываем общую доходность портфеля
+        if (totalInvestment != 0.0) {
+            double portfolioYield = (totalCurrentValue - totalInvestment) / totalInvestment;
+            return portfolioYield * 100; // Доходность в процентах
+        } else {
+            return 0.0; // Если общая стоимость вложений равна нулю, возвращаем 0.0
+        }
     }
 
 }

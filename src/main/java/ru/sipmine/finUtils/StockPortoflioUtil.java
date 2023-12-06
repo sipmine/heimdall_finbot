@@ -47,9 +47,11 @@ public class StockPortoflioUtil {
         return yield;
     }
 
-    public double getYieldMonth(String portfolioName) {
-        tinkoffInvestApi.getYieldForPortfolio();
-        return 0.0;
+    public double getYieldMonth() {
+        Portfolio iterator = portfolioandPos.values().iterator().next();
+        
+        return tinkoffInvestApi.getYieldForPortfolio(iterator);
+        
 
     }
 
