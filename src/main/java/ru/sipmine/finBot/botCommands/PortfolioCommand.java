@@ -19,7 +19,7 @@ import ru.tinkoff.piapi.core.models.Portfolio;
 import ru.tinkoff.piapi.core.models.Position;
 // ... (imports and class declaration remain unchanged)
 // ... (imports and class declaration remain unchanged)
-
+@Deprecated
 public class PortfolioCommand extends AbstractBotCommand {
 
     // Existing variables remain unchanged
@@ -75,6 +75,7 @@ public class PortfolioCommand extends AbstractBotCommand {
 
             // Set the message text and send the message
             message.setText(messageText.toString());
+            
             super.processMessage(absSender, message, strings);
         }
     }

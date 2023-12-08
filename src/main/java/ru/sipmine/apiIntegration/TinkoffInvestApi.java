@@ -153,12 +153,8 @@ public class TinkoffInvestApi {
             double averagePositionPrice = position.getAveragePositionPrice().getValue().doubleValue();
             double currentPrice = position.getCurrentPrice().getValue().doubleValue();
             int quantity = position.getQuantity().intValue(); // предположим, есть метод для получения количества позиции
-            System.out.println(averagePositionPrice);
-            System.out.println(currentPrice);
-            System.out.println(quantity);
             double positionInvestment = averagePositionPrice * quantity;
             double positionCurrentValue = currentPrice * quantity;
-    
             totalInvestment += positionInvestment;
             totalCurrentValue += positionCurrentValue;
         }
