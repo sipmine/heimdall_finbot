@@ -99,7 +99,6 @@ public class FinBot extends TelegramLongPollingCommandBot {
             callbackkb = update.getCallbackQuery().getData().toString();
     
             if (callbackkb.startsWith("gpc")) {
-                
                 pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString())).callback(update, callbackkb.split("gpc")[1]));
                 bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
                 callbackkb = null;

@@ -78,6 +78,7 @@ public class GetPortfolioCommand extends AbstractMultiCommand {
 
     public SendMessage callback(Update update, String arg) {
         SendMessage sm = new SendMessage();
+        
         String id = portflios.get(arg);
         Portfolio portflio = tinkoffInvestApi.GetPortfolio(id);
         List<Position> pos = portflio.getPositions();
@@ -100,7 +101,7 @@ public class GetPortfolioCommand extends AbstractMultiCommand {
                         .append("-------------------------\n");
         }
         sm.setText(str.toString());
-        sm.setChatId(update.getMessage().getChatId());
+        sm.setChatId(update.getCallbackQuery().getMessage().getChatId());
         return sm;
     }
 }

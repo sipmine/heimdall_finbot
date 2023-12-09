@@ -51,29 +51,11 @@ public class YieldCommand extends AbstractMultiCommand {
         System.out.println(stockPortoflioUtil.getYieldMonth());
         System.out.println(2222);
 
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-
-        InlineKeyboardButton yieldMonth = new InlineKeyboardButton();
-        InlineKeyboardButton yieldYear = new InlineKeyboardButton();
-        InlineKeyboardButton yieldAll = new InlineKeyboardButton();
-        yieldMonth.setText("за месяц");
-        yieldMonth.setCallbackData("yieldMonth");
-        yieldYear.setText("за год");
-        yieldYear.setCallbackData("yieldYear");
-        yieldAll.setText("за всё время");
-        yieldAll.setCallbackData("yieldAll");
-        rowInline.add(yieldMonth);
-        rowInline.add(yieldYear);
-        rowInline.add(yieldAll);
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
+        
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(msg.getChatId());
         sendMessage.setText("Выберете за какой период, хотите получить доходность");
 
-        sendMessage.setReplyMarkup(markupInline);
         return sendMessage;
     }
 
