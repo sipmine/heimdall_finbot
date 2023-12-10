@@ -2,6 +2,7 @@ package ru.sipmine.finBot.botCommands;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +66,15 @@ public class GetPortfolioCommand extends AbstractMultiCommand {
         Iterator<String> portflioNames = portflios.keySet().iterator();
         for (int i = 0; i < portflios.size(); i++) {
             InlineKeyboardButton btn = new InlineKeyboardButton();
-            String names = portflioNames.next(); 
+            String names = portflioNames.next();
             btn.setText(names);
-            btn.setCallbackData("gpc" + names); 
+            btn.setCallbackData("gpc" + names);
             row.add(btn);
         }
+        InlineKeyboardButton all = new InlineKeyboardButton();
+        all.setText("Все");
+        all.setCallbackData("gpc" + "all");
+        row.add(all);
         rows.add(row);
         keyboardMarkup.setKeyboard(rows);
         sm.setReplyMarkup(keyboardMarkup);
@@ -77,31 +82,44 @@ public class GetPortfolioCommand extends AbstractMultiCommand {
     }
 
     public SendMessage callback(Update update, String arg) {
-        SendMessage sm = new SendMessage();
-        
-        String id = portflios.get(arg);
-        Portfolio portflio = tinkoffInvestApi.GetPortfolio(id);
-        List<Position> pos = portflio.getPositions();
-        StringBuilder str = new StringBuilder();
-        for (Position position : pos) {
-            String inst = position.getInstrumentType().toString();
-            String figi = position.getFigi();
-            
-            String[] info = tinkoffInvestApi.getNameandTick(figi, inst);
-            BigDecimal curPrice = position.getCurrentPrice().getValue();
-            BigDecimal buyPrice = position.getAveragePositionPrice().getValue();
-            BigDecimal quantity = position.getQuantity();
-
-                // Append position information to the message text
-            str.append("Название: ").append(info[1])
-                        .append(" Тикер: ").append(info[0])
-                        .append(" Текущая цена: ").append(curPrice.doubleValue())
-                        .append(" Цена покупки: ").append(buyPrice.doubleValue())
-                        .append(" Количество: ").append(quantity.doubleValue()).append("\n")
-                        .append("-------------------------\n");
+        Set<String> keyName = new HashSet<>();
+        if (arg.equals("all")) {
+            keyName = portflios.keySet();
+        } else {
+            keyName.add(arg);
         }
-        sm.setText(str.toString());
+        
+        SendMessage sm = new SendMessage();
+        StringBuilder htmlBuilder = new StringBuilder();
+        for (String keyN: keyName) {
+            String id = portflios.get(keyN);
+            Portfolio portfolio = tinkoffInvestApi.GetPortfolio(id);
+            List<Position> pos = portfolio.getPositions();
+
+            htmlBuilder.append("<b>---- ").append(keyN).append(" ----</b>\n");
+
+            for (Position position : pos) {
+                String inst = position.getInstrumentType().toString();
+                String figi = position.getFigi();
+                String[] info = tinkoffInvestApi.getNameandTick(figi, inst);
+                BigDecimal curPrice = position.getCurrentPrice().getValue();
+                BigDecimal buyPrice = position.getAveragePositionPrice().getValue();
+                BigDecimal quantity = position.getQuantity();
+
+                // Append position information to the HTML message
+                htmlBuilder.append("<b>Название:</b> ").append(info[1]).append("\n")
+                        .append("<b>Тикер:</b> ").append(info[0]).append("\n")
+                        .append("<b>Текущая цена:</b> ").append(curPrice.doubleValue()).append("\n")
+                        .append("<b>Цена покупки:</b> ").append(buyPrice.doubleValue()).append("\n")
+                        .append("<b>Количество:</b> ").append(quantity.doubleValue()).append("\n")
+                        .append("-------------------------").append("\n");
+            }
+            htmlBuilder.append("\n");
+        }
+        sm.setParseMode("HTML");
+        sm.setText(htmlBuilder.toString());
         sm.setChatId(update.getCallbackQuery().getMessage().getChatId());
         return sm;
     }
+
 }
