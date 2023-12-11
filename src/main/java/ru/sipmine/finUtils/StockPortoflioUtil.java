@@ -32,22 +32,9 @@ public class StockPortoflioUtil {
         }
   
     }
-    // all portfolio yield
-    public double getAllYield() {
-        double yield = 0.0; 
+    
 
-        Iterator<Portfolio> iterator = portfolioandPos.values().iterator();
-       
-        System.out.println(portfolioandPos.size());
-        for (int i = 0; i < portfolioandPos.size(); i++) {
-            System.out.println(i);
-            yield += iterator.next().getExpectedYield().doubleValue();
-           
-        }
-        return yield;
-    }
-
-    public double getYieldMonth() {
+    public double getYield() {
         Portfolio iterator = portfolioandPos.values().iterator().next();
         
         return tinkoffInvestApi.getYieldForPortfolio(iterator);

@@ -152,7 +152,7 @@ public class TinkoffInvestApi {
         for (Position position : positionsList) {
             double averagePositionPrice = position.getAveragePositionPrice().getValue().doubleValue();
             double currentPrice = position.getCurrentPrice().getValue().doubleValue();
-            int quantity = position.getQuantity().intValue(); // предположим, есть метод для получения количества позиции
+            int quantity = position.getQuantity().intValue(); 
             double positionInvestment = averagePositionPrice * quantity;
             double positionCurrentValue = currentPrice * quantity;
             totalInvestment += positionInvestment;
@@ -162,9 +162,9 @@ public class TinkoffInvestApi {
         // Рассчитываем общую доходность портфеля
         if (totalInvestment != 0.0) {
             double portfolioYield = (totalCurrentValue - totalInvestment) / totalInvestment;
-            return portfolioYield * 100; // Доходность в процентах
+            return portfolioYield * 100; 
         } else {
-            return 0.0; // Если общая стоимость вложений равна нулю, возвращаем 0.0
+            return 0.0; 
         }
     }
 
