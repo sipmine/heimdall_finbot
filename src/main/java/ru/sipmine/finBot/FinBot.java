@@ -98,12 +98,18 @@ public class FinBot extends TelegramLongPollingCommandBot {
         } else if (update.hasCallbackQuery()) {
             callbackkb = update.getCallbackQuery().getData().toString();
     
+            System.out.println(callbackkb);
             if (callbackkb.startsWith("gpc")) {
+                
                 pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString())).callback(update, callbackkb.split("gpc")[1]));
                 bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
                 callbackkb = null;
+            } else if (callbackkb.startsWith("gyc")) {
+                
+                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString())).callback(update, callbackkb.split("gyc")[1]));
+                bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
+                callbackkb = null;
             }
-
             if (callbackkb.equals("tininv")) {
             
                 SendMessage sm = new SendMessage(update.getCallbackQuery().getMessage().getChatId().toString(),

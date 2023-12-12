@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -80,8 +79,9 @@ public class GetYieldCommand extends AbstractMultiCommand {
     @Override
     public SendMessage callback(Update update, String arg) {
         SendMessage sm = new SendMessage();
-        sm.setChatId(update.getMessage().getChatId());
-        sm.setText("done");
+        StockPortoflioUtil stockPortoflioUtil = new StockPortoflioUtil(token);
+        sm.setChatId(update.getCallbackQuery().getMessage().getChatId());
+        sm.setText("Доходность портфеля: " + stockPortoflioUtil.getYield(arg));
         return sm;
     }
 

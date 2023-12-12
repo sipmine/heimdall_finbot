@@ -1,14 +1,13 @@
 package ru.sipmine.finUtils;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ru.sipmine.apiIntegration.TinkoffInvestApi;
 import ru.tinkoff.piapi.core.models.Portfolio;
-import ru.tinkoff.piapi.core.models.Position;
 
 public class StockPortoflioUtil {
 
@@ -34,10 +33,19 @@ public class StockPortoflioUtil {
     }
     
 
-    public double getYield() {
-        Portfolio iterator = portfolioandPos.values().iterator().next();
+    public double getYield(String portfolioName) {
+        Set<String> names = new HashSet<>();
+        double yield = 0.0;
+        if (portfolioName.equals("all")) {
+            names = portfolioandPos.keySet();
+        } else {
+            names.add(portfolioName);
+        }
+        for(String name: names) {
+            yield += tinkoffInvestApi.getYieldForPortfolio(portfolioandPos.get(name));
+        }
         
-        return tinkoffInvestApi.getYieldForPortfolio(iterator);
+        return yield;
         
 
     }
