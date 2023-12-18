@@ -44,7 +44,7 @@ public class SessionGenerator {
         }
         return statusCode;
     }
-
+    // request GET 
     public HttpURLConnection ConnectionGET(String endpoint, Map map)
             throws InvalidKeyException, NoSuchAlgorithmException {
         HttpURLConnection connection = null;
@@ -62,6 +62,39 @@ public class SessionGenerator {
         }
         return connection;
     }
+    public HttpURLConnection ConnectionGET(String endpoint)
+            throws InvalidKeyException, NoSuchAlgorithmException {
+        HttpURLConnection connection = null;
+        
+        try {
+            URL url = new URL("https://api.bybit.com" + endpoint);
+            connection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+    // requset POST
+    public HttpURLConnection ConnectionPOST(String endpoint, Map map)
+            throws InvalidKeyException, NoSuchAlgorithmException {
+        HttpURLConnection connection = null;
+        String sign = genPostSign(map);
+        StringBuilder sb = genQueryStr(map);
+        try {
+            URL url = new URL("https://api.bybit.com" + endpoint + "?" + sb);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("X-BAPI-API-KEY", apiKey);
+            connection.setRequestProperty("X-BAPI-SIGN", sign);
+            connection.setRequestProperty("X-BAPI-TIMESTAMP", timestamp);
+            connection.setRequestProperty("X-BAPI-RECV-WINDOW", RECV_WINDOW);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+ 
+
+
 
     private String genPostSign(Map<String, Object> params) throws NoSuchAlgorithmException, InvalidKeyException {
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");

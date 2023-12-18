@@ -2,17 +2,24 @@ package ru.sipmine;
 
 
 
+import org.postgresql.translation.messages_bg;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import com.google.gson.JsonSyntaxException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Properties;
 import ru.sipmine.data.PsqlConnector;
 import ru.sipmine.finBot.FinBot;
+import ru.sipmine.finUtils.byBitApi.MarketService;
+import ru.sipmine.finUtils.byBitApi.SessionGenerator;
 
 /**
  * The Main class is the entry point of the application.
@@ -24,6 +31,7 @@ public class Main {
         try {
             File configFile = new File("src/main/resources/config.yml");
             FileInputStream inputStream = new FileInputStream(configFile);
+            
             properties.load(inputStream);
             inputStream.close();
         } catch (IOException e) {
@@ -33,10 +41,12 @@ public class Main {
     }
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, InvalidKeyException, JsonSyntaxException, NoSuchAlgorithmException, IOException {
 
         try {
-
+            SessionGenerator sessionGenerator = new SessionGenerator(null, null);
+            MarketService service = new MarketService(sessionGenerator);
+            service.getServerTime();
             PsqlConnector psqlConnector = new PsqlConnector();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(new FinBot(configData().getProperty("bot_name"),
