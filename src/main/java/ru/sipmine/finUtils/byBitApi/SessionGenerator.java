@@ -45,7 +45,7 @@ public class SessionGenerator {
         return statusCode;
     }
     // request GET 
-    public HttpURLConnection ConnectionGET(String endpoint, Map map)
+    public HttpURLConnection connectionGET(String endpoint, Map map)
             throws InvalidKeyException, NoSuchAlgorithmException {
         HttpURLConnection connection = null;
         String sign = genGetSign(map);
@@ -62,7 +62,7 @@ public class SessionGenerator {
         }
         return connection;
     }
-    public HttpURLConnection ConnectionGET(String endpoint)
+    public HttpURLConnection connectionGET(String endpoint)
             throws InvalidKeyException, NoSuchAlgorithmException {
         HttpURLConnection connection = null;
         
@@ -75,7 +75,7 @@ public class SessionGenerator {
         return connection;
     }
     // requset POST
-    public HttpURLConnection ConnectionPOST(String endpoint, Map map)
+    public HttpURLConnection connectionPOST(String endpoint, Map map)
             throws InvalidKeyException, NoSuchAlgorithmException {
         HttpURLConnection connection = null;
         String sign = genPostSign(map);
