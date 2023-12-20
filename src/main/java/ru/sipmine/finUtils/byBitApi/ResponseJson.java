@@ -8,6 +8,7 @@ public class ResponseJson {
     private Map<String, Object> result;
     private Map<String, Object> retExtInfo;
     private Long time;
+    private String category;
 
     public ResponseJson() {
 
@@ -21,6 +22,7 @@ public class ResponseJson {
         this.retExtInfo = retExtInfo;
         this.time = time;
     }
+
 
     public int getRetCode() {
         return retCode;

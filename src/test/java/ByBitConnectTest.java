@@ -24,7 +24,7 @@ public class ByBitConnectTest {
         SessionGenerator sessionGenerator = new SessionGenerator(null, null);
         Map<String, Object> map = new HashMap<>();
         map.put("accountType", "UNIFIED");
-        HttpURLConnection connection = sessionGenerator.ConnectionGET("/v5/account/wallet-balance", map);
+        HttpURLConnection connection = sessionGenerator.connectionGET("/v5/account/wallet-balance", map);
         try {
             assertEquals(connection.getResponseCode(), 200);
             connection.disconnect();
@@ -37,7 +37,7 @@ public class ByBitConnectTest {
     public void checkConnectionToEndpointPOSTTest() throws InvalidKeyException, NoSuchAlgorithmException {
         SessionGenerator sessionGenerator = new SessionGenerator(null, null);
         Map <String, Object> map = new HashMap<>();
-        HttpURLConnection connection = sessionGenerator.ConnectionPOST("", map);
+        HttpURLConnection connection = sessionGenerator.connectionPOST("", map);
         try {
             assertEquals(connection.getResponseCode(), 200);
             connection.disconnect();

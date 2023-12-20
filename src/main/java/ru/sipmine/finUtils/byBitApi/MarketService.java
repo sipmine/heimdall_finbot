@@ -45,13 +45,23 @@ public class MarketService {
         return responseJson;
     }
 
+    // Return server time
     public ResponseJson getServerTime()
             throws InvalidKeyException, NoSuchAlgorithmException, JsonSyntaxException, IOException {
-        return getResponse("/v4/market/time", null);
+        return getResponse("/v5/market/time", null);
 
     }
 
-    public ResponseJson getKline(String pairCurrency, int interval, String category)
+    /**
+     * Query for historical klines (also known as candles/candlesticks). Charts are
+     * returned in groups based on the requested interval.
+     * 
+     * @param pairCurrency - Symbol name
+     * @param interval     - Kline interval. 1,3,5,15,30,60,120,240,360,720,D,M,W
+     * @param category     - Product type. spot,linear,inverse
+     * 
+     */
+    public ResponseJson getKline(String pairCurrency, String interval, String category)
             throws InvalidKeyException, NoSuchAlgorithmException, JsonSyntaxException, IOException {
 
         Map<String, Object> map = new HashMap<>();
@@ -63,7 +73,7 @@ public class MarketService {
 
     }
 
-    public ResponseJson getMarkPriceKline(String pairCurrency, int interval)
+    public ResponseJson getMarkPriceKline(String pairCurrency, String interval)
             throws InvalidKeyException, NoSuchAlgorithmException, JsonSyntaxException, IOException {
         Map<String, Object> map = new HashMap<>();
         map.put("symbol", pairCurrency);
@@ -72,7 +82,7 @@ public class MarketService {
 
     }
 
-    public ResponseJson getIndexPriceKline(String pairCurrency, int interval)
+    public ResponseJson getIndexPriceKline(String pairCurrency, String interval)
             throws InvalidKeyException, NoSuchAlgorithmException, JsonSyntaxException, IOException {
         Map<String, Object> map = new HashMap<>();
         map.put("symbol", pairCurrency);
@@ -129,7 +139,7 @@ public class MarketService {
 
     }
 
-    public ResponseJson getOpenInterest(String category, String pairCurrency, int intervalTime)
+    public ResponseJson getOpenInterest(String category, String pairCurrency, String intervalTime)
             throws InvalidKeyException, NoSuchAlgorithmException, JsonSyntaxException, IOException {
         Map<String, Object> map = new HashMap<>();
         map.put("category", category);
@@ -139,7 +149,7 @@ public class MarketService {
         return getResponse("/v5/market/open-interest", map);
 
     }
-
+    @Deprecated
     public ResponseJson getHistoricalVolatility(String category, String baseCoin)
             throws InvalidKeyException, NoSuchAlgorithmException, JsonSyntaxException, IOException {
         Map<String, Object> map = new HashMap<>();

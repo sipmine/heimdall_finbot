@@ -2,13 +2,6 @@ package ru.sipmine;
 
 
 
-import org.postgresql.translation.messages_bg;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-
-import com.google.gson.JsonSyntaxException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,10 +9,20 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Properties;
+
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
+import com.google.gson.JsonSyntaxException;
+
 import ru.sipmine.data.PsqlConnector;
 import ru.sipmine.finBot.FinBot;
 import ru.sipmine.finUtils.byBitApi.MarketService;
 import ru.sipmine.finUtils.byBitApi.SessionGenerator;
+import ru.sipmine.finUtils.byBitApi.MarkeTypes.FundingRateHistoryType;
+import ru.sipmine.finUtils.byBitApi.MarkeTypes.RiskLimitType;
+import ru.sipmine.finUtils.byBitApi.MarkeTypes.TickersType;
 
 /**
  * The Main class is the entry point of the application.
@@ -45,8 +48,6 @@ public class Main {
 
         try {
             SessionGenerator sessionGenerator = new SessionGenerator(null, null);
-            MarketService service = new MarketService(sessionGenerator);
-            service.getServerTime();
             PsqlConnector psqlConnector = new PsqlConnector();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(new FinBot(configData().getProperty("bot_name"),
