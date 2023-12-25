@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "api_integration")
 public class ApiIngegratioTable {
@@ -16,15 +17,17 @@ public class ApiIngegratioTable {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UsersTable user;
 
-    @Column(name="name_api")
+    @Column(name = "name_api")
     private String nameApi;
-
 
     @Column(name = "api_token")
     private String tokenApi;
+
+    @Column(name = "secret_token")
+    private String secretToken;
 
     public void setUserId(UsersTable usersTable) {
         this.user = usersTable;
@@ -33,7 +36,12 @@ public class ApiIngegratioTable {
     public void setTokenApi(String tokenApi) {
         this.tokenApi = tokenApi;
     }
-    public void setNameApi(String nameApi){ 
+
+    public void setSecret(String secretToken) {
+        this.secretToken = secretToken;
+    }
+
+    public void setNameApi(String nameApi) {
         this.nameApi = nameApi;
     }
 
@@ -41,13 +49,16 @@ public class ApiIngegratioTable {
         return this.id;
     }
 
-
     public String getTokenApi() {
         return this.tokenApi;
     }
 
-    public String getNameApi(){
+    public String getNameApi() {
         return this.nameApi;
+    }
+
+    public String getSecret() {
+        return this.secretToken;
     }
 
 }

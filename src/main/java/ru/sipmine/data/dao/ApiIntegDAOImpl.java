@@ -20,7 +20,7 @@ public class ApiIntegDAOImpl implements ApiIntegDAO {
     }
 
     @Override
-    public  void addApiInteg(UsersTable usersTable, String name_service , String tokenApi) {
+    public  void addApiInteg(UsersTable usersTable, String name_service , String tokenApi, String secretToken) {
         Session session =  sessionFactory.openSession();
         Transaction transaction = null;
 
@@ -30,6 +30,7 @@ public class ApiIntegDAOImpl implements ApiIntegDAO {
             apiIngegratioTable.setUserId(usersTable);
             apiIngegratioTable.setNameApi(name_service);
             apiIngegratioTable.setTokenApi(tokenApi);
+            apiIngegratioTable.setSecret(secretToken);
             session.persist(apiIngegratioTable);
             
             transaction.commit();

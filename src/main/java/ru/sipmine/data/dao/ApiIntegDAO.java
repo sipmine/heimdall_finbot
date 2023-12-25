@@ -5,7 +5,7 @@ import ru.sipmine.data.tables.UsersTable;
 
 public interface ApiIntegDAO {
 
-    public void addApiInteg(UsersTable usersTable,String name_service,String tokenApi);
+    public void addApiInteg(UsersTable usersTable,String name_service,String tokenApi, String secretToken);
 
     public void deleteApiInteg(int Id);
 

@@ -18,12 +18,12 @@ public class ApiAddCommands extends AbstractMultiCommand {
     // Userservice is used to create a new user or to find an existing user.
     private final UserService userService;
     private final ApiIntegService apiIntegService;
+
     public ApiAddCommands(SessionFactory sessionFactory) {
         super("apiadd", "аналитика");
         this.userService = new UserService(sessionFactory);
         this.apiIntegService = new ApiIntegService(sessionFactory);
     }
-
 
     @Override
     public SendMessage handle(Update update) {
@@ -33,12 +33,17 @@ public class ApiAddCommands extends AbstractMultiCommand {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
 
-        InlineKeyboardButton button1 = new InlineKeyboardButton();
-        
-        button1.setText("Тинькофф");
-        button1.setCallbackData("tininv");
+        InlineKeyboardButton tininv = new InlineKeyboardButton();
+        InlineKeyboardButton bybit = new InlineKeyboardButton();
+
+        tininv.setText("Тинькофф");
+        tininv.setCallbackData("tininv");
+
+        bybit.setText("ByBit");
+        bybit.setCallbackData("bybit");
         // Rest of the code...
-        rowInline.add(button1);
+        rowInline.add(tininv);
+        rowInline.add(bybit);
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         SendMessage message = new SendMessage();
@@ -48,21 +53,31 @@ public class ApiAddCommands extends AbstractMultiCommand {
         return message;
     }
 
-
     @Override
     public SendMessage callback(Update update, String arg) {
+
         Message msg = update.getMessage();
+        System.out.println(msg.getText().toString());
+        String[] split = new String[2];
+        split = msg.getText().split(" ");
+
         String text;
         int id = userService.findIdByTelegramUserName(msg.getFrom().getUserName());
 
         if (id > 0 && !(arg == null)) {
             UsersTable ut = userService.getUserById(id);
-            apiIntegService.addApiInteg(ut,arg ,msg.getText().toString());
+            if (split.length == 1) {
+                apiIntegService.addApiInteg(ut, arg, split[0], "");
+            } else {
+    
+                apiIntegService.addApiInteg(ut, arg, split[0], split[1]);
+            }
             text = "Токен добавлен";
         } else {
             text = "Вы не зарегестрированы введите /start, или не выбрали сервис";
         }
         return new SendMessage(msg.getChatId().toString(), text);
+
     }
 
 }

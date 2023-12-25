@@ -9,6 +9,8 @@ Command list
 7. analiticsC - AI nice to have -
 
 
+8. Remove tokens
+
 Env var
 Setup this variabels
 All variabel caps on

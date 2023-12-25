@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import ru.sipmine.finBot.botCommands.AbstractMultiCommand;
 import ru.sipmine.finBot.botCommands.ApiAddCommands;
+import ru.sipmine.finBot.botCommands.GetCryptoPortfolioCommand;
 import ru.sipmine.finBot.botCommands.GetPortfolioCommand;
 import ru.sipmine.finBot.botCommands.StartCommand;
 import ru.sipmine.finBot.botCommands.GetYieldCommand;
@@ -43,6 +44,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         this.botToken = botToken;
         this.sessionFactory = sessionFactory;
         register(new StartCommand(this.sessionFactory));
+        register(new GetCryptoPortfolioCommand(this.sessionFactory));
         commandList.put("/apiadd", new ApiAddCommands(sessionFactory));
         commandList.put("/getPortfolio", new GetPortfolioCommand(sessionFactory));
         commandList.put("/getYield", new GetYieldCommand(sessionFactory));
@@ -98,7 +100,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         } else if (update.hasCallbackQuery()) {
             callbackkb = update.getCallbackQuery().getData().toString();
     
-            System.out.println(callbackkb);
+
             if (callbackkb.startsWith("gpc")) {
                 
                 pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString())).callback(update, callbackkb.split("gpc")[1]));
@@ -110,10 +112,10 @@ public class FinBot extends TelegramLongPollingCommandBot {
                 bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
                 callbackkb = null;
             }
-            if (callbackkb.equals("tininv")) {
+            if (callbackkb.equals("tininv") || callbackkb.equals("bybit")) {
             
                 SendMessage sm = new SendMessage(update.getCallbackQuery().getMessage().getChatId().toString(),
-                        "введи токен от тинькофф инвестиций");
+                        "введи токен");
                 pubMsg(sm);
             }
 
