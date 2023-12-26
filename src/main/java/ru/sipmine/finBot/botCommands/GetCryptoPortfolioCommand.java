@@ -1,5 +1,7 @@
 package ru.sipmine.finBot.botCommands;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
@@ -59,9 +61,9 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
         SessionGenerator sessionGenerator = new SessionGenerator(tokens[1], tokens[0]);
         AccountService as = new AccountService(sessionGenerator);
         WalletType walletType = new WalletType(as.getWalletBalance("UNIFIED"));     
-        LinkedHashTreeMap<String, Object> obj = walletType.getWalletList().get(0);
-        System.out.println(obj);
-        //System.out.println(obj.get("coin"));
+        Map<String, Object>  map = new HashMap<>();
+        map = walletType.getWalletList().get(0);
+
         message.setText("k");
         super.processMessage(absSender, message, null); 
         
