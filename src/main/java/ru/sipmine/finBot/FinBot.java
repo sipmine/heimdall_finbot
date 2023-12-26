@@ -32,13 +32,6 @@ public class FinBot extends TelegramLongPollingCommandBot {
     private final Map<String, String> bindingBy = new ConcurrentHashMap<>();
     private final Map<String, AbstractMultiCommand> commandList = new ConcurrentHashMap<>();
 
-    /**
-     * Constructor for the FinBot class.
-     * 
-     * @param botName        The name of the bot.
-     * @param botToken       The token of the bot.
-     * @param sessionFactory The session factory for the bot.
-     */
     public FinBot(String botName, String botToken, SessionFactory sessionFactory) {
         this.botName = botName;
         this.botToken = botToken;

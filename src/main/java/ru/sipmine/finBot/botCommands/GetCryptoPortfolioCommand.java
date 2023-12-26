@@ -3,14 +3,18 @@ package ru.sipmine.finBot.botCommands;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
+
+import com.google.gson.internal.LinkedHashTreeMap;
+import com.google.gson.internal.LinkedTreeMap;
 
 import ru.sipmine.data.services.ApiIntegService;
 import ru.sipmine.data.services.UserService;
 import ru.sipmine.data.tables.ApiIngegratioTable;
+import ru.sipmine.finUtils.byBitApi.AccountService;
+import ru.sipmine.finUtils.byBitApi.SessionGenerator;
+import ru.sipmine.finUtils.byBitApi.AccountTypes.WalletType;
 
 public class GetCryptoPortfolioCommand extends AbstractBotCommand {
     private UserService userService;
@@ -52,11 +56,13 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
         Set<ApiIngegratioTable> aip = userService.getAllApiIngegratioTables(id);
         
         tokens = getToken(aip);
-        
-
-
-
-
+        SessionGenerator sessionGenerator = new SessionGenerator(tokens[1], tokens[0]);
+        AccountService as = new AccountService(sessionGenerator);
+        WalletType walletType = new WalletType(as.getWalletBalance("UNIFIED"));     
+        LinkedHashTreeMap<String, Object> obj = walletType.getWalletList().get(0);
+        System.out.println(obj);
+        //System.out.println(obj.get("coin"));
+        message.setText("k");
         super.processMessage(absSender, message, null); 
         
     }
