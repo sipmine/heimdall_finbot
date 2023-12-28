@@ -1,15 +1,15 @@
 package ru.sipmine.finBot.botCommands;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
-
-import com.google.gson.internal.LinkedHashTreeMap;
-import com.google.gson.internal.LinkedTreeMap;
 
 import ru.sipmine.data.services.ApiIntegService;
 import ru.sipmine.data.services.UserService;
@@ -23,7 +23,7 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
     private ApiIntegService apiIntegService;
     private String[] tokens;
 
-    public GetCryptoPortfolioCommand(SessionFactory sessionFactory){
+    public GetCryptoPortfolioCommand(SessionFactory sessionFactory) {
         super("getCrypto", "Возвращает крипто портфель");
         userService = new UserService(sessionFactory);
         apiIntegService = new ApiIntegService(sessionFactory);
@@ -34,44 +34,53 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
         String token = aip.stream()
                 .filter(table -> table.getId() == idApi)
                 .findFirst()
-                .map(ApiIngegratioTable::getTokenApi)                
+                .map(ApiIngegratioTable::getTokenApi)
                 .orElse(null);
         String secret = aip.stream()
                 .filter(table -> table.getId() == idApi)
                 .findFirst()
-                .map(ApiIngegratioTable::getSecret)                
+                .map(ApiIngegratioTable::getSecret)
                 .orElse(null);
-            
-        return new String[] {token, secret};
+
+        return new String[] { token, secret };
     }
 
-
-
-
     @Override
-    public void processMessage(AbsSender absSender, org.telegram.telegrambots.meta.api.objects.Message message, String[] strings) {
+    public void processMessage(AbsSender absSender, org.telegram.telegrambots.meta.api.objects.Message message,
+            String[] strings) {
         // TODO Auto-generated method stub
-        User user = message.getFrom(); 
-    
-        
+        User user = message.getFrom();
+
         int id = userService.findIdByTelegramUserName(user.getUserName());
         Set<ApiIngegratioTable> aip = userService.getAllApiIngegratioTables(id);
-        
+
         tokens = getToken(aip);
         SessionGenerator sessionGenerator = new SessionGenerator(tokens[1], tokens[0]);
         AccountService as = new AccountService(sessionGenerator);
-        WalletType walletType = new WalletType(as.getWalletBalance("UNIFIED"));     
-        Map<String, Object>  map = new HashMap<>();
+        WalletType walletType = new WalletType(as.getWalletBalance("UNIFIED"));
+        Map<String, Object> map = new HashMap<>();
         map = walletType.getWalletList().get(0);
+        List<Object> coins = new ArrayList<>();
+        coins = (List<Object>) map.get("coin");
+        StringBuilder sb = new StringBuilder();
+        sb.append("----- криптопортфель -----\n");
+        for (int i = 0; i<coins.size(); i++) {
+            Map<String, Object> coin = new HashMap<>();
+            coin = (Map<String, Object> )coins.get(i);
+            BigDecimal cap = new BigDecimal(coin.get("usdValue").toString());
+            BigDecimal min = new BigDecimal(0.1);
+            if (cap.compareTo(min) < 0.1) {
+                continue;
+            }
+            sb.append("Название: " + coin.get("coin").toString() + "\n");
+            sb.append("Текущея стоимсоть: " + coin.get("usdValue").toString() + "\n");
+            sb.append("Кол-во: " + coin.get("walletBalance").toString() + "\n");
+            sb.append("P&L: " + coin.get("cumRealisedPnl").toString() + "\n");
+            sb.append("---------------------\n");
+        }
+        message.setText(sb.toString());
+        super.processMessage(absSender, message, null);
 
-        message.setText("k");
-        super.processMessage(absSender, message, null); 
-        
     }
-
-
-
-
-
 
 }
