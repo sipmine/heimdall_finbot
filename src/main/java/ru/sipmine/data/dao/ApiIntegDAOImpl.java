@@ -46,7 +46,23 @@ public class ApiIntegDAOImpl implements ApiIntegDAO {
 
     @Override
     public void deleteApiInteg(int Id) {
-        
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        ApiIngegratioTable apiIngegratioTable = null;
+        try {
+            transaction = session.beginTransaction();
+            apiIngegratioTable = gIngegratioTablebyId(Id);
+            session.remove(apiIngegratioTable);
+            transaction.commit();
+           
+        } catch (Exception e ) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
     @Override

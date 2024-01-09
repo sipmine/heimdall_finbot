@@ -20,6 +20,7 @@ import ru.sipmine.finBot.botCommands.GetCryptoPortfolioCommand;
 import ru.sipmine.finBot.botCommands.GetPortfolioCommand;
 import ru.sipmine.finBot.botCommands.StartCommand;
 import ru.sipmine.finBot.botCommands.GetYieldCommand;
+import ru.sipmine.finBot.botCommands.DeleteTokenCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +42,12 @@ public class FinBot extends TelegramLongPollingCommandBot {
         commandList.put("/apiadd", new ApiAddCommands(sessionFactory));
         commandList.put("/getPortfolio", new GetPortfolioCommand(sessionFactory));
         commandList.put("/getYield", new GetYieldCommand(sessionFactory));
+        commandList.put("/delete", new DeleteTokenCommand(sessionFactory));
     }
 
     /**
      * Returns the username of the bot.
+     * 
      * @return The username of the bot.
      */
     @Override
@@ -54,6 +57,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
 
     /**
      * Returns the token of the bot.
+     * 
      * @return The token of the bot.
      */
     @Override
@@ -92,27 +96,35 @@ public class FinBot extends TelegramLongPollingCommandBot {
             }
         } else if (update.hasCallbackQuery()) {
             callbackkb = update.getCallbackQuery().getData().toString();
-    
-
+            System.out.println(callbackkb);
             if (callbackkb.startsWith("gpc")) {
-                
-                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString())).callback(update, callbackkb.split("gpc")[1]));
+
+                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString()))
+                        .callback(update, callbackkb.split("gpc")[1]));
                 bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
                 callbackkb = null;
             } else if (callbackkb.startsWith("gyc")) {
+
+                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString()))
+                        .callback(update, callbackkb.split("gyc")[1]));
+                bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
+                callbackkb = null;
+            } else if (callbackkb.startsWith("gdc")) {
+                System.out.println(callbackkb.split("gdc")[1]);
                 
-                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString())).callback(update, callbackkb.split("gyc")[1]));
+                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString()))
+                        .callback(update, callbackkb.split("gdc")[1]));
+                
                 bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
                 callbackkb = null;
             }
             if (callbackkb.equals("tininv") || callbackkb.equals("bybit")) {
-            
+
                 SendMessage sm = new SendMessage(update.getCallbackQuery().getMessage().getChatId().toString(),
                         "введи токен");
                 pubMsg(sm);
             }
 
-            
         }
     }
 

@@ -72,6 +72,7 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
             if (cap.compareTo(min) < 0.1) {
                 continue;
             }
+            
             sb.append("Название: " + coin.get("coin").toString() + "\n");
             sb.append("Текущея стоимсоть: " + coin.get("usdValue").toString() + "\n");
             sb.append("Кол-во: " + coin.get("walletBalance").toString() + "\n");
