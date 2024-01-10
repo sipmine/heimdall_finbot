@@ -48,7 +48,6 @@ public class GetPortfolioCommand extends AbstractMultiCommand {
 
     @Override
     public SendMessage handle(Update update) {
-        // TODO Auto-generated method stub
         var msg = update.getMessage();
         Long chatId = msg.getChatId();
         int id = userService.findIdByTelegramUserName(msg.getFrom().getUserName());

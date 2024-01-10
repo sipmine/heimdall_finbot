@@ -6,7 +6,6 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +44,7 @@ public class SessionGenerator {
         return statusCode;
     }
     // request GET 
-    public HttpURLConnection connectionGET(String endpoint, Map map)
+    public HttpURLConnection connectionGET(String endpoint, Map<String,Object> map)
             throws InvalidKeyException, NoSuchAlgorithmException {
         HttpURLConnection connection = null;
         String sign = genGetSign(map);
@@ -75,7 +74,7 @@ public class SessionGenerator {
         return connection;
     }
     // requset POST
-    public HttpURLConnection connectionPOST(String endpoint, Map map)
+    public HttpURLConnection connectionPOST(String endpoint, Map<String, Object> map)
             throws InvalidKeyException, NoSuchAlgorithmException {
         HttpURLConnection connection = null;
         String sign = genPostSign(map);

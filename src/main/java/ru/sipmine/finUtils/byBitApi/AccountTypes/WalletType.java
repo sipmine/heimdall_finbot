@@ -6,6 +6,7 @@ import com.google.gson.internal.LinkedHashTreeMap;
 
 import ru.sipmine.finUtils.byBitApi.ResponseJson;
 
+@SuppressWarnings("unchecked")
 public class WalletType {
     private List<LinkedHashTreeMap<String, Object>> list;
 
@@ -14,6 +15,7 @@ public class WalletType {
     }
     
     public List<LinkedHashTreeMap<String, Object>> getWalletList() {
+       
         return list;
     }
 

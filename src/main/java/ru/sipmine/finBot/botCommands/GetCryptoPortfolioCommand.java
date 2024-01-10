@@ -1,7 +1,6 @@
 package ru.sipmine.finBot.botCommands;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,6 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
     @Override
     public void processMessage(AbsSender absSender, org.telegram.telegrambots.meta.api.objects.Message message,
             String[] strings) {
-        // TODO Auto-generated method stub
         User user = message.getFrom();
 
         int id = userService.findIdByTelegramUserName(user.getUserName());
@@ -60,13 +58,11 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
         WalletType walletType = new WalletType(as.getWalletBalance("UNIFIED"));
         Map<String, Object> map = new HashMap<>();
         map = walletType.getWalletList().get(0);
-        List<Object> coins = new ArrayList<>();
-        coins = (List<Object>) map.get("coin");
+        List<?> coins = (List<?>) map.get("coin");
         StringBuilder sb = new StringBuilder();
         sb.append("----- криптопортфель -----\n");
         for (int i = 0; i<coins.size(); i++) {
-            Map<String, Object> coin = new HashMap<>();
-            coin = (Map<String, Object> )coins.get(i);
+            Map<?, ?> coin = (Map<?, ?>) coins.get(i);
             BigDecimal cap = new BigDecimal(coin.get("usdValue").toString());
             BigDecimal min = new BigDecimal(0.1);
             if (cap.compareTo(min) < 0.1) {

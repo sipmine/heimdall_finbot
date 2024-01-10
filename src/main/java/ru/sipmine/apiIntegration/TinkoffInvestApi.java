@@ -1,9 +1,4 @@
 package ru.sipmine.apiIntegration;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +15,6 @@ import ru.tinkoff.piapi.core.OperationsService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import com.google.protobuf.Timestamp;
 
 /**
  * This class represents a TinkoffInvestApi object that allows interaction with
@@ -47,7 +41,6 @@ public class TinkoffInvestApi {
         try {
             accounts = usersService.getAccounts().get(5, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

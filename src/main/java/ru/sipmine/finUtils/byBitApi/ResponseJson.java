@@ -8,7 +8,6 @@ public class ResponseJson {
     private Map<String, Object> result;
     private Map<String, Object> retExtInfo;
     private Long time;
-    private String category;
 
     public ResponseJson() {
 

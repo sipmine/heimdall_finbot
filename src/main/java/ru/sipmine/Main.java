@@ -18,14 +18,7 @@ import com.google.gson.JsonSyntaxException;
 
 import ru.sipmine.data.PsqlConnector;
 import ru.sipmine.finBot.FinBot;
-import ru.sipmine.finUtils.byBitApi.AccountService;
-import ru.sipmine.finUtils.byBitApi.MarketService;
-import ru.sipmine.finUtils.byBitApi.SessionGenerator;
-import ru.sipmine.finUtils.byBitApi.AccountTypes.WalletType;
-import ru.sipmine.finUtils.byBitApi.MarkeTypes.FundingRateHistoryType;
-import ru.sipmine.finUtils.byBitApi.MarkeTypes.RiskLimitType;
-import ru.sipmine.finUtils.byBitApi.MarkeTypes.TickersType;
-import ru.tinkoff.piapi.contract.v1.Account;
+
 
 /**
  * The Main class is the entry point of the application.

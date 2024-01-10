@@ -22,7 +22,7 @@ public class DeleteTokenCommand extends AbstractMultiCommand {
     public DeleteTokenCommand(SessionFactory sessionFactory) {
         super("delete", "delete tokens");
         userService = new UserService(sessionFactory);
-        apiIntegService = new ApiIntegService(sessionFactory); // TODO Auto-generated constructor stub
+        apiIntegService = new ApiIntegService(sessionFactory); 
     }
 
     @Override
@@ -61,13 +61,11 @@ public class DeleteTokenCommand extends AbstractMultiCommand {
 
         // choice token remove
 
-        // TODO Auto-generated method stub
         return message;
     }
 
     @Override
     public SendMessage callback(Update update, String arg) {
-        // TODO Auto-generated method stub
 
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
         System.out.println("l");

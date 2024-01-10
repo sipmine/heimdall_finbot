@@ -22,8 +22,6 @@ import ru.sipmine.finBot.botCommands.StartCommand;
 import ru.sipmine.finBot.botCommands.GetYieldCommand;
 import ru.sipmine.finBot.botCommands.DeleteTokenCommand;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class FinBot extends TelegramLongPollingCommandBot {
     private String botName;
@@ -69,7 +67,6 @@ public class FinBot extends TelegramLongPollingCommandBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

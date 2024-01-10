@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.internal.LinkedTreeMap;
 
 import ru.sipmine.finUtils.byBitApi.ResponseJson;
-
+@SuppressWarnings("unchecked")
 public class RiskLimitType {
     private String category;
     private List<LinkedTreeMap<String, Object>> list;

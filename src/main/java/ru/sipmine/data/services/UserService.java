@@ -11,7 +11,6 @@ import javax.annotation.Nonnull;
 
 import org.hibernate.SessionFactory;
 
-import lombok.NonNull;
 import ru.sipmine.data.dao.UsersDAOImpl;
 import ru.sipmine.data.tables.ApiIngegratioTable;
 import ru.sipmine.data.tables.UsersTable;

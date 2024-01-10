@@ -2,9 +2,6 @@ package ru.sipmine.finBot.botCommands;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.bots.AbsSender;
-
 public abstract class AbstractMultiCommand {
     private String commandIndif;
     private String description;

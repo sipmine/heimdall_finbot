@@ -8,13 +8,13 @@ import ru.sipmine.finUtils.byBitApi.ResponseJson;
 public class KlineType {
     private String category;
     private String symbol;
-    private List<String> list;
+    private List<?> list;
 
     public KlineType(ResponseJson responseJson) {
         Map<String, Object> map = responseJson.getResult();
         this.category = (String) map.get("category");
         this.symbol = (String) map.get("symbol");
-        this.list = (List<String>) map.get("list");
+        this.list = (List<?>) map.get("list");
 
     }
 
@@ -27,7 +27,7 @@ public class KlineType {
         return symbol;
     }
 
-    public List<String> getList() {
+    public List<?> getList() {
         return list;
     }
 
