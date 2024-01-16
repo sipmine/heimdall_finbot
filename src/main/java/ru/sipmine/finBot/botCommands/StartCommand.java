@@ -3,13 +3,14 @@
  * It extends the AbstractBotCommand class and implements the processMessage method.
  * It creates a new user if the user is new, otherwise it welcomes the returning user.
  */
-package ru.sipmine.finBot.BotCommands;
+package ru.sipmine.finBot.botCommands;
 
 import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
-import ru.sipmine.data.Services.UserService;
+
+import ru.sipmine.data.services.UserService;
 
 public class StartCommand extends AbstractBotCommand {
     // Userservice is used to create a new user or to find an existing user.

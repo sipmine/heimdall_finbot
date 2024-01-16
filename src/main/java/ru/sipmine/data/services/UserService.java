@@ -2,12 +2,18 @@
  * The UserService class provides methods for managing users in the system.
  * It interacts with the UsersDAOImpl class to perform CRUD operations on the users.
  */
-package ru.sipmine.data.Services;
+package ru.sipmine.data.services;
 
+
+import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import org.hibernate.SessionFactory;
-import ru.sipmine.data.DAO.UsersDAOImpl;
-import ru.sipmine.data.tables.Users;
+
+import ru.sipmine.data.dao.UsersDAOImpl;
+import ru.sipmine.data.tables.ApiIngegratioTable;
+import ru.sipmine.data.tables.UsersTable;
 
 
 public class UserService {
@@ -27,12 +33,12 @@ public class UserService {
 
     
 
-    public Users getUserById(int Id){
+    public UsersTable getUserById(int Id){
         return this.usersDAOImp.getUserById(Id);
     }
     
-    public void createUser(Long telegramId,  String telegramName){
-        this.usersDAOImp.addUser(telegramId, telegramName);
+    public void createUser(@Nonnull Long long1,  String telegramName){
+        this.usersDAOImp.addUser(long1, telegramName);
     }
     
     public void deleteUser(int Id) {
@@ -47,4 +53,9 @@ public class UserService {
     public int findIdByTelegramUserName(String telegramUserName) {
         return this.usersDAOImp.findIdByTelegramUserName(telegramUserName);
     }
+
+    public Set<ApiIngegratioTable> getAllApiIngegratioTables(int id){
+        return this.usersDAOImp.getAllApiIngegratioTables(id);
+    }
+
 }
