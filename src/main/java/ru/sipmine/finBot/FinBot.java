@@ -9,19 +9,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
-
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import ru.sipmine.finBot.botCommands.AbstractMultiCommand;
 import ru.sipmine.finBot.botCommands.ApiAddCommands;
+import ru.sipmine.finBot.botCommands.DeleteTokenCommand;
 import ru.sipmine.finBot.botCommands.GetCryptoPortfolioCommand;
 import ru.sipmine.finBot.botCommands.GetPortfolioCommand;
-import ru.sipmine.finBot.botCommands.StartCommand;
+import ru.sipmine.finBot.botCommands.GetRateCurrencyCommand;
 import ru.sipmine.finBot.botCommands.GetYieldCommand;
-import ru.sipmine.finBot.botCommands.DeleteTokenCommand;
-
+import ru.sipmine.finBot.botCommands.StartCommand;
 
 public class FinBot extends TelegramLongPollingCommandBot {
     private String botName;
@@ -41,6 +40,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         commandList.put("/getPortfolio", new GetPortfolioCommand(sessionFactory));
         commandList.put("/getYield", new GetYieldCommand(sessionFactory));
         commandList.put("/delete", new DeleteTokenCommand(sessionFactory));
+        commandList.put("/getRate", new GetRateCurrencyCommand(sessionFactory));
     }
 
     /**
@@ -93,28 +93,39 @@ public class FinBot extends TelegramLongPollingCommandBot {
             }
         } else if (update.hasCallbackQuery()) {
             callbackkb = update.getCallbackQuery().getData().toString();
-            System.out.println(callbackkb);
+
+            String commandPrefix = null;
+
             if (callbackkb.startsWith("gpc")) {
-
-                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString()))
-                        .callback(update, callbackkb.split("gpc")[1]));
-                bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
-                callbackkb = null;
+                commandPrefix = "gpc";
             } else if (callbackkb.startsWith("gyc")) {
-
-                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString()))
-                        .callback(update, callbackkb.split("gyc")[1]));
-                bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
-                callbackkb = null;
+                commandPrefix = "gyc";
             } else if (callbackkb.startsWith("gdc")) {
-                System.out.println(callbackkb.split("gdc")[1]);
-                
-                pubMsg(commandList.get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString()))
-                        .callback(update, callbackkb.split("gdc")[1]));
-                
-                bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
-                callbackkb = null;
+                commandPrefix = "gdc";
+            } else if (callbackkb.startsWith("grc")) {
+                commandPrefix = "grc";
             }
+
+            if (commandPrefix != null) {
+                String commandSuffix = callbackkb.split(commandPrefix)[1];
+
+                switch (commandPrefix) {
+                    case "gpc":
+                    case "gyc":
+                    case "gdc":
+                    case "grc":
+                        pubMsg(commandList
+                                .get(bindingBy.get(update.getCallbackQuery().getMessage().getChatId().toString()))
+                                .callback(update, commandSuffix));
+                        bindingBy.remove(update.getCallbackQuery().getMessage().getChatId().toString());
+                        callbackkb = null;
+                        break;
+                    default:
+                        // Handle unexpected commandPrefix
+                        break;
+                }
+            }
+
             if (callbackkb.equals("tininv") || callbackkb.equals("bybit")) {
 
                 SendMessage sm = new SendMessage(update.getCallbackQuery().getMessage().getChatId().toString(),
