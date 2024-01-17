@@ -57,7 +57,6 @@ public class ApiAddCommands extends AbstractMultiCommand {
     public SendMessage callback(Update update, String arg) {
 
         Message msg = update.getMessage();
-        System.out.println(msg.getText().toString());
         String[] split = new String[2];
         split = msg.getText().split(" ");
 
