@@ -15,7 +15,6 @@ import ru.sipmine.data.services.UserService;
 public class StartCommand extends AbstractBotCommand {
     // Userservice is used to create a new user or to find an existing user.
     private final UserService userService;
-
     public StartCommand(SessionFactory sessionFactory) {
         super("start", "Запуск бота");
         this.userService = new UserService(sessionFactory);
@@ -31,7 +30,6 @@ public class StartCommand extends AbstractBotCommand {
         } else {
             message.setText("С возвращением");
         }
-
         super.processMessage(absSender, message, null);
     }
 }

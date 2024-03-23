@@ -4,15 +4,19 @@
  */
 package ru.sipmine.finBot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.SessionFactory;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import ru.sipmine.finBot.Keyboards.RoutesKeyboard;
 import ru.sipmine.finBot.botCommands.AbstractMultiCommand;
 import ru.sipmine.finBot.botCommands.ApiAddCommands;
 import ru.sipmine.finBot.botCommands.DeleteTokenCommand;
@@ -26,14 +30,20 @@ public class FinBot extends TelegramLongPollingCommandBot {
     private String botName;
     private String botToken;
     private String callbackkb;
+    
     private SessionFactory sessionFactory;
     private final Map<String, String> bindingBy = new ConcurrentHashMap<>();
     private final Map<String, AbstractMultiCommand> commandList = new ConcurrentHashMap<>();
-
+    private static final List<String> directors = new ArrayList<>();
     public FinBot(String botName, String botToken, SessionFactory sessionFactory) {
         this.botName = botName;
         this.botToken = botToken;
         this.sessionFactory = sessionFactory;
+        RoutesKeyboard.choiceKeyboard();
+        directors.add("Setting");
+        directors.add("Finance");
+        directors.add("Crypto");
+        directors.add("Back");
         register(new StartCommand(this.sessionFactory));
         register(new GetCryptoPortfolioCommand(this.sessionFactory));
         commandList.put("/apiadd", new ApiAddCommands(sessionFactory));
@@ -41,6 +51,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
         commandList.put("/getYield", new GetYieldCommand(sessionFactory));
         commandList.put("/delete", new DeleteTokenCommand(sessionFactory));
         commandList.put("/getRate", new GetRateCurrencyCommand(sessionFactory));
+        
     }
 
     /**
@@ -71,6 +82,17 @@ public class FinBot extends TelegramLongPollingCommandBot {
         }
     }
 
+    public void delMsg(DeleteMessage deleteMessage) {
+        try {
+            execute(deleteMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+    
+
+
+
     /**
      * Processes non-command updates.
      * 
@@ -78,7 +100,6 @@ public class FinBot extends TelegramLongPollingCommandBot {
      */
     @Override
     public void processNonCommandUpdate(Update update) {
-
         if (update.hasMessage() && update.getMessage().hasText()) {
             String key = update.getMessage().getText();
             String chatID = update.getMessage().getChatId().toString();
@@ -89,8 +110,18 @@ public class FinBot extends TelegramLongPollingCommandBot {
                 pubMsg(commandList.get(bindingBy.get(chatID)).callback(update, callbackkb));
                 bindingBy.remove(chatID);
                 callbackkb = null;
-
+            
             }
+            if (directors.contains(update.getMessage().getText())) {
+                RoutesKeyboard.setKeyboardName(update.getMessage().getText());
+                RoutesKeyboard.choiceKeyboard();                
+                SendMessage updKeyboard = new SendMessage();
+                updKeyboard.setChatId(chatID);
+                updKeyboard.setText("Вы перешли в категорию " + update.getMessage().getText());
+                updKeyboard.setReplyMarkup(RoutesKeyboard.getKeyboardMarkup());
+                pubMsg(updKeyboard);      
+            }
+
         } else if (update.hasCallbackQuery()) {
             callbackkb = update.getCallbackQuery().getData().toString();
 
