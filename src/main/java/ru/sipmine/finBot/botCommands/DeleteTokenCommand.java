@@ -68,11 +68,8 @@ public class DeleteTokenCommand extends AbstractMultiCommand {
     public SendMessage callback(Update update, String arg) {
 
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
-        System.out.println("l");
         int id_api = apiIntegService.findIdByName(arg);
-        System.out.println("t");
         apiIntegService.deleteApiInteg(id_api);
-        System.out.println("jj");
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText("токен успешно удалён");

@@ -17,6 +17,7 @@ import ru.sipmine.data.services.ApiIntegService;
 import ru.sipmine.data.services.UserService;
 import ru.sipmine.data.tables.ApiIngegratioTable;
 import ru.sipmine.finUtils.StockPortoflioUtil;
+import ru.sipmine.finUtils.apiFun;
 
 public class GetYieldCommand extends AbstractMultiCommand {
 
@@ -32,23 +33,15 @@ public class GetYieldCommand extends AbstractMultiCommand {
         this.userService = new UserService(sessionFactory);
         this.apiIntegService = new ApiIntegService(sessionFactory);
     }
-    private String getToken(Set<ApiIngegratioTable> aip) {
-        int idApi = apiIntegService.findIdByName("tininv");
-        String token = aip.stream()
-                .filter(table -> table.getId() == idApi)
-                .findFirst()
-                .map(ApiIngegratioTable::getTokenApi)
-                .orElse(null);
-        return token;
-    }
+
 
     @Override
     public SendMessage handle(Update update) {
-        var msg = update.getMessage();
-        Long chatId = msg.getChatId();
-        int id = userService.findIdByTelegramUserName(msg.getFrom().getUserName());
+        long chatId = getChatId(update.getMessage());
+        int id = getUserId(update.getMessage(), userService);
+        
         Set<ApiIngegratioTable> aip = userService.getAllApiIngegratioTables(id);
-        token = getToken(aip);
+        token = apiFun.getToken(aip, apiIntegService, "tininv")[0];
         tinkoffInvestApi = new TinkoffInvestApi(token);
         this.portflios = tinkoffInvestApi.getAllPortoflio();
         SendMessage sm = new SendMessage();

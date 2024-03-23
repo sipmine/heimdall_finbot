@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 import ru.sipmine.data.services.ApiIntegService;
 import ru.sipmine.data.services.UserService;
 import ru.sipmine.data.tables.ApiIngegratioTable;
+import ru.sipmine.finUtils.apiFun;
 import ru.sipmine.finUtils.byBitApi.AccountService;
 import ru.sipmine.finUtils.byBitApi.SessionGenerator;
 import ru.sipmine.finUtils.byBitApi.AccountTypes.WalletType;
@@ -28,31 +28,14 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
         apiIntegService = new ApiIntegService(sessionFactory);
     }
 
-    private String[] getToken(Set<ApiIngegratioTable> aip) {
-        int idApi = apiIntegService.findIdByName("bybit");
-        String token = aip.stream()
-                .filter(table -> table.getId() == idApi)
-                .findFirst()
-                .map(ApiIngegratioTable::getTokenApi)
-                .orElse(null);
-        String secret = aip.stream()
-                .filter(table -> table.getId() == idApi)
-                .findFirst()
-                .map(ApiIngegratioTable::getSecret)
-                .orElse(null);
-
-        return new String[] { token, secret };
-    }
-
     @Override
     public void processMessage(AbsSender absSender, org.telegram.telegrambots.meta.api.objects.Message message,
             String[] strings) {
-        User user = message.getFrom();
 
-        int id = userService.findIdByTelegramUserName(user.getUserName());
+        int id = getUserId(null, userService);
         Set<ApiIngegratioTable> aip = userService.getAllApiIngegratioTables(id);
 
-        tokens = getToken(aip);
+        tokens = apiFun.getToken(aip, apiIntegService, "bybit");
         SessionGenerator sessionGenerator = new SessionGenerator(tokens[1], tokens[0]);
         AccountService as = new AccountService(sessionGenerator);
         WalletType walletType = new WalletType(as.getWalletBalance("UNIFIED"));
@@ -61,14 +44,14 @@ public class GetCryptoPortfolioCommand extends AbstractBotCommand {
         List<?> coins = (List<?>) map.get("coin");
         StringBuilder sb = new StringBuilder();
         sb.append("----- криптопортфель -----\n");
-        for (int i = 0; i<coins.size(); i++) {
+        for (int i = 0; i < coins.size(); i++) {
             Map<?, ?> coin = (Map<?, ?>) coins.get(i);
             BigDecimal cap = new BigDecimal(coin.get("usdValue").toString());
             BigDecimal min = new BigDecimal(0.1);
             if (cap.compareTo(min) < 0.1) {
                 continue;
             }
-            
+
             sb.append("Название: " + coin.get("coin").toString() + "\n");
             sb.append("Текущея стоимсоть: " + coin.get("usdValue").toString() + "\n");
             sb.append("Кол-во: " + coin.get("walletBalance").toString() + "\n");
