@@ -35,6 +35,7 @@ public class FinBot extends TelegramLongPollingCommandBot {
     private final Map<String, String> bindingBy = new ConcurrentHashMap<>();
     private final Map<String, AbstractMultiCommand> commandList = new ConcurrentHashMap<>();
     private static final List<String> directors = new ArrayList<>();
+    @SuppressWarnings("deprecation")
     public FinBot(String botName, String botToken, SessionFactory sessionFactory) {
         this.botName = botName;
         this.botToken = botToken;
@@ -46,10 +47,10 @@ public class FinBot extends TelegramLongPollingCommandBot {
         directors.add("Back");
         register(new StartCommand(this.sessionFactory));
         register(new GetCryptoPortfolioCommand(this.sessionFactory));
-        commandList.put("/apiadd", new ApiAddCommands(sessionFactory));
+        commandList.put("/apiAdd", new ApiAddCommands(sessionFactory));
         commandList.put("/getPortfolio", new GetPortfolioCommand(sessionFactory));
         commandList.put("/getYield", new GetYieldCommand(sessionFactory));
-        commandList.put("/delete", new DeleteTokenCommand(sessionFactory));
+        commandList.put("/apiDel", new DeleteTokenCommand(sessionFactory));
         commandList.put("/getRate", new GetRateCurrencyCommand(sessionFactory));
         
     }

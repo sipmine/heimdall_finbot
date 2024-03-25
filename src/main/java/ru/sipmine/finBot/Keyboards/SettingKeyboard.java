@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 public class SettingKeyboard  extends AbstractReplyKeyboard{
     public SettingKeyboard() {
         KeyboardButton back = new KeyboardButton("Back");
-        KeyboardButton apiAdd = new KeyboardButton("/addApi");
-        KeyboardButton apiDel = new KeyboardButton("/delApi");
+        KeyboardButton apiAdd = new KeyboardButton("/apiAdd");
+        KeyboardButton apiDel = new KeyboardButton("/apiDel");
         
         KeyboardRow row = new KeyboardRow();
         row.add(back);

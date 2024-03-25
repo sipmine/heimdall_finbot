@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 public class CryptoKeyboard extends AbstractReplyKeyboard{
     public CryptoKeyboard() {
         KeyboardButton back = new KeyboardButton("Back");
-        KeyboardButton crypoPortfolio = new KeyboardButton("/getCryptoPortfolio");
+        KeyboardButton crypoPortfolio = new KeyboardButton("/getCrypto");
 
 
         KeyboardRow row = new KeyboardRow();

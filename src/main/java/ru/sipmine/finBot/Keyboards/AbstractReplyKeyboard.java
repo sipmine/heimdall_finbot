@@ -13,6 +13,7 @@ public abstract class AbstractReplyKeyboard {
         keyboard.add(row);
     }
     public void keyboardPair() {
+        replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setKeyboard(keyboard);
     }
 }
