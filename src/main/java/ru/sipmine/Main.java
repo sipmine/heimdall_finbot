@@ -1,29 +1,36 @@
 package ru.sipmine;
 
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Properties;
 
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
+import com.google.gson.JsonSyntaxException;
+
 import ru.sipmine.data.PsqlConnector;
-import ru.sipmine.data.tables.Users;
 import ru.sipmine.finBot.FinBot;
 
+
+/**
+ * The Main class is the entry point of the application.
+ * It contains the main method which initializes and starts the FinBot Telegram bot.
+ */
 public class Main {
     private static Properties configData() {
         Properties properties = new Properties();
         try {
             File configFile = new File("src/main/resources/config.yml");
             FileInputStream inputStream = new FileInputStream(configFile);
+            
             properties.load(inputStream);
             inputStream.close();
         } catch (IOException e) {
@@ -33,35 +40,19 @@ public class Main {
     }
 
 
-    public static void main(String[] args) throws SQLException {
-        
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = PsqlConnector.getSessionFactory().openSession();
-            transaction = session.beginTransaction(); // Start a new transaction
-    
-            Users users = new Users();
-            users.setTelegramId(312);
-            users.setTelegramName("sip");
-            users.setCreatedAt(LocalDateTime.now());
-            session.persist(users);
-    
-            transaction.commit(); // Commit the transaction
-    
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(new FinBot(configData().getProperty("bot_name"), configData().getProperty("bot_token")));
-        } catch (TelegramApiException e) {
-            if (transaction != null) {
-                transaction.rollback(); // Rollback the transaction in case of an error
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close(); // Always close the session
-            }
-    }
+    public static void main(String[] args) throws SQLException, InvalidKeyException, JsonSyntaxException, NoSuchAlgorithmException, IOException {
 
+        try {
+            PsqlConnector psqlConnector = new PsqlConnector();
+            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+            telegramBotsApi.registerBot(new FinBot(configData().getProperty("bot_name"),
+                    configData().getProperty("bot_token"), psqlConnector.getSessionFactory()));
+        } catch (TelegramApiException e) {
+            // if (transaction != null) {
+            // transaction.rollback(); // Rollback the transaction in case of an error
+            // }
+            e.printStackTrace();
+        }
 
     }
 }
